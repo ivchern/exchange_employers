@@ -1,7 +1,6 @@
 package com.ivchern.exchange_employers.Controllers;
 
-import com.ivchern.exchange_employers.DTO.UserDTO;
-import com.ivchern.exchange_employers.Model.User.User;
+import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
 import com.ivchern.exchange_employers.Services.User.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

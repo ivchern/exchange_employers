@@ -1,8 +1,8 @@
 package com.ivchern.exchange_employers.Services.User;
 
-import com.ivchern.exchange_employers.DTO.ContactDTO;
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeamDTO;
-import com.ivchern.exchange_employers.DTO.UserDTO;
+import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
+import com.ivchern.exchange_employers.DTO.UserDTO.ContactDTO;
 import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Team;
 import com.ivchern.exchange_employers.Model.User.Contact;
@@ -51,14 +51,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserDTO> findById(Long id) {
         Optional<UserDTO> userDTOOpt;
-
+        Team team;
         Optional<User> userOpt = userRepository.findById(id);
         if(!userOpt.isPresent()){
             userDTOOpt = Optional.empty();
             return userDTOOpt;
         }
         User user = userOpt.get();
-        Team team = teamRepository.findByOwnerId(id).get();
+        Optional<Team> teamOpt = teamRepository.findByOwnerId(id);
+        if(teamOpt.isPresent()){
+            team = teamOpt.get();
+        }else {
+            team = new Team();
+        }
         List<Contact> contact = contactRepository.findAllByUserId(id);
         ModelMapper modelMapper = new ModelMapper();
 

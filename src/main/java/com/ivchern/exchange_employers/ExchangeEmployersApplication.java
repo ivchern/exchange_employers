@@ -1,34 +1,27 @@
 package com.ivchern.exchange_employers;
 
-
 import com.ivchern.exchange_employers.Controllers.AuthController;
 import com.ivchern.exchange_employers.Controllers.CardControllers.RequestWorkerController;
 import com.ivchern.exchange_employers.Controllers.CardControllers.ResourcesController;
 import com.ivchern.exchange_employers.Controllers.UserController;
 import com.ivchern.exchange_employers.DTO.CardDTO.RequestWorkerDtoOnCreate;
 import com.ivchern.exchange_employers.DTO.CardDTO.ResourceDtoOnCreate;
-import com.ivchern.exchange_employers.DTO.ContactDTO;
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeammateDTO;
-import com.ivchern.exchange_employers.DTO.UserDTO;
-import com.ivchern.exchange_employers.Model.Card.Resource;
+import com.ivchern.exchange_employers.DTO.UserDTO.ContactDTO;
+import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
 import com.ivchern.exchange_employers.Model.Team.Skill;
+import com.ivchern.exchange_employers.Model.User.ERole;
+import com.ivchern.exchange_employers.Model.User.Role;
 import com.ivchern.exchange_employers.Model.User.User;
+import com.ivchern.exchange_employers.Repositories.RoleRepository;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
-import com.ivchern.exchange_employers.Repositories.TeammateRepository;
 import com.ivchern.exchange_employers.Services.Teammate.TeammateService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
-import org.springframework.data.jpa.repository.Query;
-
-import javax.sql.DataSource;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,10 +39,13 @@ public class ExchangeEmployersApplication {
 		SpringApplication.run(ExchangeEmployersApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner LoadData(AuthController authController, UserController userController,
+	public CommandLineRunner LoadData(RoleRepository roleRepository, AuthController authController, UserController userController,
 									  SkillRepository skillRepository, TeammateService teammateService,
 									  ResourcesController resourcesController, RequestWorkerController requestWorkerController) {
 		return (args) -> {
+			roleRepository.save(new Role(1, ERole.ROLE_USER));
+			roleRepository.save(new Role(2, ERole.ROLE_ADMIN));
+			roleRepository.save(new Role(3, ERole.ROLE_MODERATOR));
 			authController.registerUser(new User("test1", "test1@test.test", "123456"));
 			authController.registerUser(new User("test2", "test2@test.test", "123456"));
 			authController.registerUser(new User("test3", "test3@test.test", "123456"));

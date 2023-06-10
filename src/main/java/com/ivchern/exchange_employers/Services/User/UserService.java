@@ -1,6 +1,6 @@
 package com.ivchern.exchange_employers.Services.User;
 
-import com.ivchern.exchange_employers.DTO.UserDTO;
+import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
 
 import java.util.Optional;
 

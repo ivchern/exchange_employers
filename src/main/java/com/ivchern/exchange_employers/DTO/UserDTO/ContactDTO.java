@@ -1,4 +1,4 @@
-package com.ivchern.exchange_employers.DTO;
+package com.ivchern.exchange_employers.DTO.UserDTO;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
