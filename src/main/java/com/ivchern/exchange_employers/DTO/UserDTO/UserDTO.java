@@ -1,6 +1,6 @@
-package com.ivchern.exchange_employers.DTO;
+package com.ivchern.exchange_employers.DTO.UserDTO;
 
-import com.ivchern.exchange_employers.Model.User.Contact;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,8 @@ public class UserDTO {
     private String firstname;
     private String email;
     private String lastname;
+    @JsonIgnore
+    private Long idTeam;
     private String nameTeam;
     private String teamDescription;
     private List<ContactDTO> contacts;

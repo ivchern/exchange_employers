@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         List<ContactDTO> userContacts = modelMapper.map(contact, new TypeToken<List<ContactDTO>>(){}.getType());
 
         userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getEmail(),
-                    user.getLastname(), team.getName(), team.getDescription(), userContacts));
+                    user.getLastname(), team.getId(), team.getName(), team.getDescription(), userContacts));
 
         return userDTOOpt;
     }
@@ -98,11 +98,11 @@ public class UserServiceImpl implements UserService {
 
         if(team != null){
             userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getEmail(),
-                    user.getLastname(), team.getName(), team.getDescription(), userContacts));
+                    user.getLastname(), team.getId(),team.getName(), team.getDescription(), userContacts));
 
         }else{
             userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getEmail(),
-                    user.getLastname(), null, null, null));
+                    user.getLastname(), null, null, null, null));
 
         }
 
