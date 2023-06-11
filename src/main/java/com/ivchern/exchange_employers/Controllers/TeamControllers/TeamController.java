@@ -1,7 +1,6 @@
 package com.ivchern.exchange_employers.Controllers.TeamControllers;
 
 import com.ivchern.exchange_employers.Model.Team.Team;
-import com.ivchern.exchange_employers.Model.Team.Teammate;
 import com.ivchern.exchange_employers.Services.Team.TeamService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

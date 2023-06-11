@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface TeamService {
     Optional<Team> findById(Long id);
     Iterable<Team> findAll();
-    Team save(TeamDTO teamDTO);
+    TeamDTO save(TeamDTO teamDTO, Long ownerId);
+    TeamDTO update(TeamDTO teamDTO, Long ownerId);
+    boolean existByOwnerId(Long id);
     void delete(Long id);
 }

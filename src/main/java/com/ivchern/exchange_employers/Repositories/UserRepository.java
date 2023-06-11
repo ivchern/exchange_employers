@@ -11,11 +11,8 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByUsername(String username);
-
     Boolean existsByUsername(String username);
-
     Boolean existsByEmail(String email);
-
     @Modifying
     @Transactional
     @Query(value = "update users set firstname = ?2 where id = ?1", nativeQuery = true)
@@ -24,4 +21,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Transactional
     @Query(value = "update users set lastname = ?2 where id = ?1", nativeQuery = true)
     int saveLastnameById(Long id, String lastname);
+    @Query(value = "select firstname from users where id = ?1", nativeQuery = true)
+    String findFirstnameById(Long id);
+    @Query(value = "select lastname from users where id = ?1", nativeQuery = true)
+    String findLastnameById(Long id);
 }

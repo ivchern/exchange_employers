@@ -3,48 +3,62 @@ package com.ivchern.exchange_employers.Services.User;
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeamDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.ContactDTO;
-import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Team;
 import com.ivchern.exchange_employers.Model.User.Contact;
 import com.ivchern.exchange_employers.Model.User.User;
 import com.ivchern.exchange_employers.Repositories.ContactRepository;
-import com.ivchern.exchange_employers.Repositories.TeamRepository;
 import com.ivchern.exchange_employers.Repositories.UserRepository;
+import com.ivchern.exchange_employers.Services.Team.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-
     private ContactRepository contactRepository;
-    private TeamRepository teamRepository;
     private UserRepository userRepository;
+    private TeamService teamService;
 
-    public UserServiceImpl(ContactRepository contactRepository, TeamRepository teamRepository, UserRepository userRepository) {
+    public UserServiceImpl(ContactRepository contactRepository, UserRepository userRepository, TeamService teamService) {
         this.contactRepository = contactRepository;
-        this.teamRepository = teamRepository;
         this.userRepository = userRepository;
+        this.teamService = teamService;
     }
 
     @Override
     public UserDTO update(UserDTO userDTO, Long id) {
-        //TODO: add transsaction manager
         contactUserSave(userDTO.getContacts(), id);
         TeamDTO teamDTO = new TeamDTO(userDTO.getNameTeam(), userDTO.getTeamDescription());
-        saveTeam(teamDTO, id);
+        if(teamService.existByOwnerId(id) == true){
+            teamDTO = teamService.update(teamDTO, id);
+        }else{
+            teamDTO = teamService.save(teamDTO, id);
+        }
+        if(teamDTO.getName() != null){
+            userDTO.setNameTeam(teamDTO.getName());;
+        }
+        if(teamDTO.getDescription() != null){
+            userDTO.setTeamDescription(teamDTO.getDescription());
+        }
+        userDTO.setTeamId(id);
+
         if(userDTO.getFirstname() != null) {
             userRepository.saveFirstnameById(id, userDTO.getFirstname());
+        }else{
+            userDTO.setFirstname(userRepository.findFirstnameById(id));
         }
+
         if(userDTO.getLastname() != null) {
             userRepository.saveLastnameById(id, userDTO.getLastname());
+        }else{
+            userDTO.setLastname(userRepository.findLastnameById(id));
         }
+        log.info(String.valueOf(userDTO));
         return userDTO;
     }
 
@@ -58,7 +72,10 @@ public class UserServiceImpl implements UserService {
             return userDTOOpt;
         }
         User user = userOpt.get();
-        Optional<Team> teamOpt = teamRepository.findByOwnerId(id);
+        Optional<Team> teamOpt = teamService.findById(user.getId());
+        if(teamOpt.isPresent()){
+            team = teamOpt.get();
+        }
         if(teamOpt.isPresent()){
             team = teamOpt.get();
         }else {
@@ -85,7 +102,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userOpt.get();
         Team team;
-        Optional<Team> teamOpt = teamRepository.findByOwnerId(user.getId());
+        Optional<Team> teamOpt = teamService.findById(user.getId());
         if (teamOpt.isPresent()) {
             team = teamOpt.get();
         }else{
@@ -122,20 +139,20 @@ public class UserServiceImpl implements UserService {
         contactRepository.saveAll(userContacts);
     }
 
-    private void saveTeam(TeamDTO teamDTO, Long id){
-        ModelMapper modelMapper = new ModelMapper();
-        Team team = modelMapper.map(teamDTO, Team.class);
-        team.setOwnerId(id);
-        team.setStatus(Status.ACTIVE);
-
-        Optional<Team> ownerId = teamRepository.findByOwnerId(id);
-
-        if(ownerId.isPresent()){
-            team.setId(ownerId.get().getId());
-        }else{
-            team.setCreated(LocalDateTime.now());
-        }
-        team.setUpdated(LocalDateTime.now());
-        teamRepository.save(team);
-    }
+//    private void saveTeam(TeamDTO teamDTO, Long id){
+//        ModelMapper modelMapper = new ModelMapper();
+//        Team team = modelMapper.map(teamDTO, Team.class);
+//        team.setOwnerId(id);
+//        team.setStatus(Status.ACTIVE);
+//
+//        Optional<Team> ownerId = teamRepository.findByOwnerId(id);
+//
+//        if(ownerId.isPresent()){
+//            team.setId(ownerId.get().getId());
+//        }else{
+//            team.setCreated(LocalDateTime.now());
+//        }
+//        team.setUpdated(LocalDateTime.now());
+//        teamRepository.save(team);
+//    }
 }

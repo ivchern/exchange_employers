@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Primary;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
 @Table(name = "contact")
 public class Contact {
     @Id
