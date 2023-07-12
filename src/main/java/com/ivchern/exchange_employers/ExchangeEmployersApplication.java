@@ -94,42 +94,43 @@ public class ExchangeEmployersApplication {
 			skillRepository.save(new Skill(6L, "Flutter", "Flutter desc"));
 			skillRepository.save(new Skill(7L, "Maven", "Maven desc"));
 			skillRepository.save(new Skill(8L, "Spring", "Spring desc"));
+			skillRepository.save(new Skill(8L, "Kafka", "Kafka desc"));
 
 			teammateService.save(new TeammateDTO("Ivan",  "Ivanov", "Java Developer", "Senior",1L, 1L
-					, new HashSet<String>(Arrays.asList("Java", "SQL", "Maven"))));
+					, new HashSet<String>(Arrays.asList("Java", "SQL", "Maven", "Kafka"))));
 			teammateService.save(new TeammateDTO("Egor",  "Egorov", "Java Developer", "Junior", 1L, 1L
-			,new HashSet<String>(Arrays.asList("Java", "SQL", "Maven"))));
+					,new HashSet<String>(Arrays.asList("Java", "SQL", "Maven"))));
 			teammateService.save(new TeammateDTO("Ilia",  "Maslow", "Java Developer", "Middle", 1L, 1L
-			,new HashSet<String>(Arrays.asList("Java", "SQL"))));
-			teammateService.save(new TeammateDTO("Alex",  "Alexandrov", "Java Developer","Middle", 1L, 1L,
+					,new HashSet<String>(Arrays.asList("Java", "SQL"))));
+			teammateService.save(new TeammateDTO("Alex",  "Alexandrov", "React Developer","Middle", 1L, 1L,
 					new HashSet<String>(Arrays.asList("React"))));
 			teammateService.save(new TeammateDTO("Alex",  "Mask", "React Developer","Middle", 2L, 2L,
 					new HashSet<String>(Arrays.asList("React"))));
-            teammateService.save(new TeammateDTO("Mikos",  "Mal", "Frontend Developer","Middle", 2L, 2L,
+			teammateService.save(new TeammateDTO("Mikos",  "Mal", "Frontend Developer","Middle", 2L, 2L,
 					new HashSet<String>(Arrays.asList("React", "Flutter"))));
 			teammateService.save(new TeammateDTO("Goshan", "Mikos",  "Mobile Developer","Middle", 3L, 3L,
 					new HashSet<String>(Arrays.asList("Flutter", "Android"))));
 			teammateService.save(new TeammateDTO("Alex",  "Mask", "Android Developer","Middle", 3L, 3L,
 					new HashSet<String>(Arrays.asList("IOS", "Android", "Flutter"))));
-            teammateService.save(new TeammateDTO("Alex",  "Mask", "IOS Developer","Middle", 3L, 3L,
+			teammateService.save(new TeammateDTO("Alex",  "Mask", "IOS Developer","Middle", 3L, 3L,
 					new HashSet<String>(Arrays.asList("IOS"))));
 
 			resourcesController.setResources(new ResourceDtoOnCreate("Java Developer", "From Home",
-					new Date(1212121212121L), new Date(1212121212131L), 1L));
+					new Date(123,05,12), new Date(124,1,1), 1L));
 			resourcesController.setResources(new ResourceDtoOnCreate("Java Developer", "From Home",
-					new Date(1212121212121L), new Date(1212121212131L), 2L));
+					new Date(124,1,1), new Date(125,1,1), 2L));
 			resourcesController.setResources(new ResourceDtoOnCreate("Mobile Developer", "From Home",
-					new Date(1212121212121L), new Date(1212121212131L), 9L));
+					new Date(123, 5, 15), new Date(125,15,15), 9L));
 			resourcesController.setResources(new ResourceDtoOnCreate("React Developer", "From Home",
-					new Date(1212121212121L), new Date(1212121212131L), 4L));
+					new Date(123,8,12), new Date(123,9,1), 4L));
 
 			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
-				"Java Developer",
-			"Time Squ Build",
-					   "Senior",
-					   "Created new Fine project",
-					   "From Home",
-					   new Date(1212121212121L),
+					"Java Developer",
+					"Time Squ Build",
+					"Senior",
+					"Created new Fine project",
+					"From Home",
+					new Date(1212121212121L),
 					false,new HashSet<>(
 					Arrays.asList("React", "SQL", "Maven"))));
 
