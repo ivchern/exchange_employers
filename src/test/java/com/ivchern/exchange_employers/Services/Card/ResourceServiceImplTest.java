@@ -17,6 +17,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -158,9 +161,12 @@ class ResourceServiceImplTest {
         Specification<Resource> specResources = (Specification)Mockito.mock(Specification.class);
         Specification<Skill> specSkill = (Specification)Mockito.mock(Specification.class);
         Specification<Teammate> specTeammate = (Specification)Mockito.mock(Specification.class);
+        Pageable pageable = PageRequest.of(0, 10);
         List<Resource> resources = new ArrayList();
-        Mockito.when(this.resourceRepository.findAll(specResources)).thenReturn(resources);
-        List<ResourceDtoOnRequest> result = this.service.search(specResources, specSkill, specTeammate, null);
+
+        Mockito.when(this.resourceRepository.findAll(specResources, pageable)).thenReturn(new PageImpl<>(resources));
+
+        List<ResourceDtoOnRequest> result = this.service.search(specResources, specSkill, specTeammate, pageable);
         Assertions.assertTrue(result.isEmpty());
     }
 
@@ -194,9 +200,12 @@ class ResourceServiceImplTest {
         teammate.setOwnerId(1L);
         teammate.setSkills(new HashSet());
         List<Resource> resources = Arrays.asList(resource1, resource2);
-        Mockito.when(this.resourceRepository.findAll(specResources)).thenReturn(resources);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Mockito.when(this.resourceRepository.findAll(specResources, pageable)).thenReturn(new PageImpl<>(resources));
         Mockito.when(this.teammateService.findAll((Specification)Mockito.any(Specification.class))).thenReturn(Collections.singletonList(teammate));
-        List<ResourceDtoOnRequest> result = this.service.search(specResources, (Specification)specSkill, (Specification)specTeammate,null);
+
+        List<ResourceDtoOnRequest> result = this.service.search(specResources, (Specification)specSkill, (Specification)specTeammate,pageable);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals("Resource 1", ((ResourceDtoOnRequest)result.get(0)).getDescription());
         Assertions.assertEquals("Resource 2", ((ResourceDtoOnRequest)result.get(1)).getDescription());
