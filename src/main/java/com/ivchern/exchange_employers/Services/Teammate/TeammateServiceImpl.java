@@ -7,6 +7,7 @@ import com.ivchern.exchange_employers.Repositories.SkillRepository;
 import com.ivchern.exchange_employers.Repositories.TeammateRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,11 @@ public class TeammateServiceImpl implements TeammateService{
     public TeammateServiceImpl(TeammateRepository teammateRepository, SkillRepository skillRepository) {
         this.teammateRepository = teammateRepository;
         this.skillRepository = skillRepository;
+    }
+
+    @Override
+    public Iterable<Teammate> findAll(Specification<Teammate> spec) {
+        return teammateRepository.findAll(spec);
     }
 
     @Override
