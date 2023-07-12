@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class ResourceDtoOnCreate extends TeammateCardDTO {
     private String description;
     private String locationWorked;

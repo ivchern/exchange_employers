@@ -16,7 +16,7 @@ import java.util.Set;
 @Data
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class RequestWorker extends BaseEntity {
     @Column(name = "job_title")
     private String jobTitle;

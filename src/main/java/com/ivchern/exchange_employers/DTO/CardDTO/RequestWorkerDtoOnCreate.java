@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.NONE, force = true)
+@NoArgsConstructor
 public class RequestWorkerDtoOnCreate {
     private String jobTitle;
     private String projectName;

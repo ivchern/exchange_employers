@@ -19,7 +19,7 @@ import java.util.Set;
 @Data
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Resource extends BaseEntity {
     @Column(name = "description")
     @Size(max = 1024)

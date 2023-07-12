@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class ResourceDtoOnRequest extends TeammateCardDTO {
     @Id
     private Long id;

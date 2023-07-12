@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor
 @Table(name = "teammate")
 public class
 Teammate extends BaseEntity {
