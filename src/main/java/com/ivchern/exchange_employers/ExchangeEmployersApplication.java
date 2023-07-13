@@ -137,12 +137,32 @@ public class ExchangeEmployersApplication {
 			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
 					"React Developer",
 					"Time Squ Build",
-					"Senior",
+					"Junior",
 					"Created new Fine project",
 					"From Home",
 					new Date(1212121212121L),
 					false,new HashSet<>(
 					Arrays.asList("React", "SQL", "Maven"))));
+
+			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
+					"React Developer",
+					"New Mihio",
+					"Middle",
+					"GO MEET",
+					"From Home",
+					new Date(1212121212121L),
+					false,new HashSet<>(
+					Arrays.asList("React", "SQL", "Java"))));
+
+			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
+					"IOS Developer",
+					"Зеленый банк",
+					"Middle",
+					"Mobile Developer",
+					"From Home",
+					new Date(125, 01,01),
+					false,new HashSet<>(
+					Arrays.asList("React", "IOS", "Flutter"))));
 		};
 	}
 }

@@ -8,11 +8,12 @@ import com.ivchern.exchange_employers.Repositories.RequestWorkerRepository;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -63,5 +64,10 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
             requestWorker.setStatus(Status.DELETED);
             requestWorkerRepository.save(requestWorker);
         }
+    }
+
+    @Override
+    public Iterable<RequestWorker> findAll(Specification<RequestWorker> specRequest, Pageable paging) {
+        return requestWorkerRepository.findAll(specRequest, paging);
     }
 }
