@@ -15,7 +15,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -66,7 +67,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     @Override
     public void delete(Long id) {
         Optional<RequestWorker> requestWorkerOpt = requestWorkerRepository.findById(id);
-        if( requestWorkerOpt.isPresent()){
+        if (requestWorkerOpt.isPresent()) {
             RequestWorker requestWorker = requestWorkerOpt.get();
             requestWorker.setUpdated(LocalDateTime.now());
             requestWorker.setStatus(Status.DELETED);

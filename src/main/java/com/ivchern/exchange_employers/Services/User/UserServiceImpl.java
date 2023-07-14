@@ -147,8 +147,5 @@ public class UserServiceImpl implements UserService {
         var userDetails = userDetailsOpt.get();
         userDetails.setContacts(new HashSet<>(userContacts));
         userDetailsRepository.save(userDetails);
-
-//        log.info(userContacts.toString());
-//        contactRepository.saveAll(userContacts);
     }
 }
