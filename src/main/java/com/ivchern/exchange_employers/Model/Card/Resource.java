@@ -2,15 +2,10 @@ package com.ivchern.exchange_employers.Model.Card;
 
 import com.ivchern.exchange_employers.Model.BaseEntity;
 import com.ivchern.exchange_employers.Model.Team.Skill;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import com.ivchern.exchange_employers.Model.User.OwnerDetail;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -20,6 +15,7 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Resource extends BaseEntity {
     @Column(name = "description")
     @Size(max = 1024)
@@ -36,5 +32,8 @@ public class Resource extends BaseEntity {
     private Date endFree;
     @Column(name = "teammate_id")
     private Long teammateId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private OwnerDetail ownerDetail;
 }
 

@@ -6,8 +6,10 @@ import com.ivchern.exchange_employers.Model.Card.Resource;
 import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Model.Team.Teammate;
+import com.ivchern.exchange_employers.Model.User.OwnerDetail;
 import com.ivchern.exchange_employers.Repositories.ResourceRepository;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
+import com.ivchern.exchange_employers.Repositories.UserDetailsRepository;
 import com.ivchern.exchange_employers.Services.Teammate.TeammateService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -26,22 +28,32 @@ public class ResourceServiceImpl implements ResourceService {
     private TeammateService teammateService;
     private ResourceRepository resourceRepository;
     private SkillRepository skillRepository;
+    private UserDetailsRepository userDetailsRepository;
 
-    public ResourceServiceImpl(TeammateService teammateService, ResourceRepository resourceRepository, SkillRepository skillRepository) {
+    public ResourceServiceImpl(TeammateService teammateService, ResourceRepository resourceRepository, SkillRepository skillRepository, UserDetailsRepository userDetailsRepository) {
         this.teammateService = teammateService;
         this.resourceRepository = resourceRepository;
         this.skillRepository = skillRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
 
     @Override
     public ResourceDtoOnRequest save(ResourceDtoOnCreate resource) {
-        ModelMapper modelMapper = new ModelMapper();
+        Resource resourceSave = new Resource();
+        resourceSave.setTeammateId(resource.getTeammateId());
+        resourceSave.setDescription(resource.getDescription());
+        resourceSave.setLocationWorked(resource.getLocationWorked());
+        resourceSave.setFromFree(resource.getFromFree());
+        resourceSave.setEndFree(resource.getEndFree());
 
-        Resource resourceSave = modelMapper.map(resource, Resource.class);
         resourceSave.setStatus(Status.ACTIVE);
         resourceSave.setCreated(LocalDateTime.now());
         resourceSave.setUpdated(LocalDateTime.now());
+
+        var userDetailOpt = userDetailsRepository.findById(resource.getOwnerId());
+        OwnerDetail ownerDetail = userDetailOpt.get();
+        resourceSave.setOwnerDetail(ownerDetail);
 
         Resource resourceUpd = resourceRepository.save(resourceSave);
         return getResourceDTOEntity(resourceUpd);

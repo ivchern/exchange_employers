@@ -116,13 +116,13 @@ public class ExchangeEmployersApplication {
 					new HashSet<String>(Arrays.asList("IOS"))));
 
 			resourcesController.setResources(new ResourceDtoOnCreate("Java Developer", "From Home",
-					new Date(123,05,12), new Date(124,1,1), 1L));
+					new Date(123,05,12), new Date(124,1,1), 1L, 1L));
 			resourcesController.setResources(new ResourceDtoOnCreate("Java Developer", "From Home",
-					new Date(124,1,1), new Date(125,1,1), 2L));
+					new Date(124,1,1), new Date(125,1,1), 2L, 2L));
 			resourcesController.setResources(new ResourceDtoOnCreate("Mobile Developer", "From Home",
-					new Date(123, 5, 15), new Date(125,15,15), 9L));
+					new Date(123, 5, 15), new Date(125,15,15), 9L, 3L));
 			resourcesController.setResources(new ResourceDtoOnCreate("React Developer", "From Home",
-					new Date(123,8,12), new Date(123,9,1), 4L));
+					new Date(123,8,12), new Date(123,9,1), 4L, 2L));
 
 			var request1 = new RequestWorkerDtoOnCreate(
 					"Java Developer",

@@ -17,4 +17,5 @@ public class ResourceDtoOnCreate extends TeammateCardDTO {
     private Date fromFree;
     private Date endFree;
     private Long teammateId;
+    private Long ownerId;
 }

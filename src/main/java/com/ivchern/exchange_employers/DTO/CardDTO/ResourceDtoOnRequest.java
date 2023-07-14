@@ -4,6 +4,8 @@ import com.ivchern.exchange_employers.DTO.TeamDTO.TeammateCardDTO;
 import com.ivchern.exchange_employers.Model.Card.Rank;
 import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Skill;
+import com.ivchern.exchange_employers.Model.User.OwnerDetail;
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,7 +25,6 @@ public class ResourceDtoOnRequest extends TeammateCardDTO {
     private Long id;
     private String jobTitle;
     private String rank;
-
     private String description;
     private String locationWorked;
     private Date fromFree;
@@ -32,4 +33,5 @@ public class ResourceDtoOnRequest extends TeammateCardDTO {
     private LocalDateTime created;
     private LocalDateTime updated;
     private Status status;
+    private OwnerDetail ownerDetail;
 }
