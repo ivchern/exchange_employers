@@ -4,8 +4,10 @@ import com.ivchern.exchange_employers.DTO.CardDTO.RequestWorkerDtoOnCreate;
 import com.ivchern.exchange_employers.Model.Card.RequestWorker;
 import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Skill;
+import com.ivchern.exchange_employers.Model.User.OwnerDetail;
 import com.ivchern.exchange_employers.Repositories.RequestWorkerRepository;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
+import com.ivchern.exchange_employers.Repositories.UserDetailsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +23,12 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
 
     private RequestWorkerRepository requestWorkerRepository;
     private SkillRepository skillRepository;
+    private UserDetailsRepository userDetailsRepository;
 
-    public RequestWorkerServiceImpl(RequestWorkerRepository requestWorkerRepository, SkillRepository skillRepository) {
+    public RequestWorkerServiceImpl(RequestWorkerRepository requestWorkerRepository, SkillRepository skillRepository, UserDetailsRepository userDetailsRepository) {
         this.requestWorkerRepository = requestWorkerRepository;
         this.skillRepository = skillRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     @Override
@@ -37,10 +41,14 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         ModelMapper modelMapper = new ModelMapper();
         RequestWorker requestWorker = modelMapper.map(requestDto, RequestWorker.class);
         Set<Skill> skills = skillRepository.findByNames(requestDto.getSkills());
-        log.info(skills.toString());
         requestWorker.setSkills(skills);
         requestWorker.setCreated(LocalDateTime.now());
         requestWorker.setStatus(Status.ACTIVE);
+        requestWorker.setId(0L);
+
+        var userDetailOpt = userDetailsRepository.findById(requestDto.getOwnerId());
+        OwnerDetail ownerDetail = userDetailOpt.get();
+        requestWorker.setOwnerDetail(ownerDetail);
         return requestWorkerRepository.save(requestWorker);
     }
 

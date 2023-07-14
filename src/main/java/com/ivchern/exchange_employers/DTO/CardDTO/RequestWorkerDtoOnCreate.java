@@ -23,4 +23,5 @@ public class RequestWorkerDtoOnCreate {
     private Date needBefore;
     private boolean isInterviewNeeded;
     private Set<String> skills;
+    private Long ownerId;
 }

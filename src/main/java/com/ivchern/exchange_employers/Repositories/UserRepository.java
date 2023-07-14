@@ -15,14 +15,14 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Boolean existsByEmail(String email);
     @Modifying
     @Transactional
-    @Query(value = "update users set firstname = ?2 where id = ?1", nativeQuery = true)
-    int saveFirstnameById(Long id, String firstname);
+    @Query(value = "update user_details set firstname = ?2 where user_id = ?1", nativeQuery = true)
+    void saveFirstnameById(Long id, String firstname);
     @Modifying
     @Transactional
-    @Query(value = "update users set lastname = ?2 where id = ?1", nativeQuery = true)
-    int saveLastnameById(Long id, String lastname);
-    @Query(value = "select firstname from users where id = ?1", nativeQuery = true)
+    @Query(value = "update user_details set lastname = ?2 where user_id = ?1", nativeQuery = true)
+    void saveLastnameById(Long id, String lastname);
+    @Query(value = "select firstname from user_details where user_id = ?1", nativeQuery = true)
     String findFirstnameById(Long id);
-    @Query(value = "select lastname from users where id = ?1", nativeQuery = true)
+    @Query(value = "select lastname from user_details where user_id = ?1", nativeQuery = true)
     String findLastnameById(Long id);
 }

@@ -124,37 +124,28 @@ public class ExchangeEmployersApplication {
 			resourcesController.setResources(new ResourceDtoOnCreate("React Developer", "From Home",
 					new Date(123,8,12), new Date(123,9,1), 4L));
 
-			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
+			var request1 = new RequestWorkerDtoOnCreate(
 					"Java Developer",
 					"Time Squ Build",
 					"Senior",
 					"Created new Fine project",
 					"From Home",
-					new Date(1212121212121L),
+					new Date(125, 01,01),
 					false,new HashSet<>(
-					Arrays.asList("React", "SQL", "Maven"))));
+					Arrays.asList("React", "SQL", "Maven")), 3L);
 
-			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
-					"React Developer",
+			var request2= new RequestWorkerDtoOnCreate(
+					"React Developer 1",
 					"Time Squ Build",
 					"Junior",
 					"Created new Fine project",
 					"From Home",
-					new Date(1212121212121L),
+					new Date(125, 01,01),
 					false,new HashSet<>(
-					Arrays.asList("React", "SQL", "Maven"))));
+					Arrays.asList("React", "SQL", "Maven")), 2L);
 
-			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
-					"React Developer",
-					"New Mihio",
-					"Middle",
-					"GO MEET",
-					"From Home",
-					new Date(1212121212121L),
-					false,new HashSet<>(
-					Arrays.asList("React", "SQL", "Java"))));
 
-			requestWorkerController.postRequest(new RequestWorkerDtoOnCreate(
+			var request3 = new RequestWorkerDtoOnCreate(
 					"IOS Developer",
 					"Зеленый банк",
 					"Middle",
@@ -162,7 +153,22 @@ public class ExchangeEmployersApplication {
 					"From Home",
 					new Date(125, 01,01),
 					false,new HashSet<>(
-					Arrays.asList("React", "IOS", "Flutter"))));
+					Arrays.asList("React", "IOS", "Flutter")), 2L);
+
+			var request4 =new RequestWorkerDtoOnCreate(
+					"React Developer 1",
+					"New Mihio",
+					"Middle",
+					"GO MEET",
+					"From Home",
+					new Date(125, 01,01),
+					false,new HashSet<>(
+					Arrays.asList("React", "SQL", "Java")), 1L);
+
+			var resResource1 = requestWorkerController.postRequest(request1);
+			var resResource2 = requestWorkerController.postRequest(request1);
+			var resResource3 = requestWorkerController.postRequest(request1);
+			var resResource4 = requestWorkerController.postRequest(request1);
 		};
 	}
 }

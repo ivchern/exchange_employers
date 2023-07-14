@@ -7,6 +7,7 @@ import com.ivchern.exchange_employers.Model.Team.Team;
 import com.ivchern.exchange_employers.Model.User.Contact;
 import com.ivchern.exchange_employers.Model.User.User;
 import com.ivchern.exchange_employers.Repositories.ContactRepository;
+import com.ivchern.exchange_employers.Repositories.UserDetailsRepository;
 import com.ivchern.exchange_employers.Repositories.UserRepository;
 import com.ivchern.exchange_employers.Services.Team.TeamService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -23,11 +23,13 @@ public class UserServiceImpl implements UserService {
     private ContactRepository contactRepository;
     private UserRepository userRepository;
     private TeamService teamService;
+    private UserDetailsRepository userDetailsRepository;
 
-    public UserServiceImpl(ContactRepository contactRepository, UserRepository userRepository, TeamService teamService) {
+    public UserServiceImpl(ContactRepository contactRepository, UserRepository userRepository, TeamService teamService, UserDetailsRepository userDetailsRepository) {
         this.contactRepository = contactRepository;
         this.userRepository = userRepository;
         this.teamService = teamService;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     @Override
@@ -84,10 +86,13 @@ public class UserServiceImpl implements UserService {
         List<Contact> contact = contactRepository.findAllByUserId(id);
         ModelMapper modelMapper = new ModelMapper();
 
+        var firstname = user.getOwnerDetail().getFirstname();
+        var lastname = user.getOwnerDetail().getLastname();
+
         List<ContactDTO> userContacts = modelMapper.map(contact, new TypeToken<List<ContactDTO>>(){}.getType());
 
-        userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getEmail(),
-                    user.getLastname(), team.getId(), team.getName(), team.getDescription(), userContacts));
+        userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), firstname, user.getEmail(),
+                    lastname, team.getId(), team.getName(), team.getDescription(), userContacts));
 
         return userDTOOpt;
     }
@@ -113,13 +118,16 @@ public class UserServiceImpl implements UserService {
 
         List<ContactDTO> userContacts = modelMapper.map(contact, new TypeToken<List<ContactDTO>>(){}.getType());
 
+        var firstname = user.getOwnerDetail().getFirstname();
+        var lastname = user.getOwnerDetail().getLastname();
+
         if(team != null){
-            userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getEmail(),
-                    user.getLastname(), team.getId(),team.getName(), team.getDescription(), userContacts));
+            userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), firstname, user.getEmail(),
+                    lastname, team.getId(),team.getName(), team.getDescription(), userContacts));
 
         }else{
-            userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getEmail(),
-                    user.getLastname(), null, null, null, null));
+            userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), firstname, user.getEmail(),
+                    lastname, null, null, null, null));
 
         }
 
@@ -135,24 +143,12 @@ public class UserServiceImpl implements UserService {
             contactRepository.findByUserIdAndTypeContact(id, contact.getTypeContact()).
                     ifPresent(contact1 -> contact.setId(contact1.getId()));
         });
-        log.info(userContacts.toString());
-        contactRepository.saveAll(userContacts);
-    }
+        var userDetailsOpt = userDetailsRepository.findById(id);
+        var userDetails = userDetailsOpt.get();
+        userDetails.setContacts(new HashSet<>(userContacts));
+        userDetailsRepository.save(userDetails);
 
-//    private void saveTeam(TeamDTO teamDTO, Long id){
-//        ModelMapper modelMapper = new ModelMapper();
-//        Team team = modelMapper.map(teamDTO, Team.class);
-//        team.setOwnerId(id);
-//        team.setStatus(Status.ACTIVE);
-//
-//        Optional<Team> ownerId = teamRepository.findByOwnerId(id);
-//
-//        if(ownerId.isPresent()){
-//            team.setId(ownerId.get().getId());
-//        }else{
-//            team.setCreated(LocalDateTime.now());
-//        }
-//        team.setUpdated(LocalDateTime.now());
-//        teamRepository.save(team);
-//    }
+//        log.info(userContacts.toString());
+//        contactRepository.saveAll(userContacts);
+    }
 }

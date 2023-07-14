@@ -2,15 +2,14 @@ package com.ivchern.exchange_employers.Model.Card;
 
 import com.ivchern.exchange_employers.Model.BaseEntity;
 import com.ivchern.exchange_employers.Model.Team.Skill;
+import com.ivchern.exchange_employers.Model.User.OwnerDetail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -39,4 +38,9 @@ public class RequestWorker extends BaseEntity {
             joinColumns = @JoinColumn(name = "request_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private Set<Skill> skills;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private OwnerDetail ownerDetail;
+
+
 }

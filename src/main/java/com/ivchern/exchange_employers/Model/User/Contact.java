@@ -1,5 +1,6 @@
 package com.ivchern.exchange_employers.Model.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,10 +14,12 @@ import org.springframework.context.annotation.Primary;
 @NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
 @Table(name = "contact")
 public class Contact {
+    @JsonIgnore
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonIgnore
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "type_contact")
