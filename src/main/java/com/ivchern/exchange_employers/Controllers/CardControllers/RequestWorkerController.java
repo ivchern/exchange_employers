@@ -28,8 +28,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -141,6 +145,7 @@ public class RequestWorkerController {
         return requestWorkerService.update(id, request);
     }
     @DeleteMapping(path = "/{id}",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удаление карточки запроса ресурса")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Success!"),
             @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired",
@@ -152,9 +157,8 @@ public class RequestWorkerController {
             @ApiResponse(responseCode = "404", description = "Resource request card not found",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))})})
-    public ResponseEntity<Void>  deleteRequest(@PathVariable("id") Long id) {
-         requestWorkerService.delete(id);
+    public ResponseEntity<Void>  deleteRequest(@PathVariable("id") Long id, Principal principal) {
+         requestWorkerService.delete(id, principal);
          return ResponseEntity.noContent().build();
-
     }
 }

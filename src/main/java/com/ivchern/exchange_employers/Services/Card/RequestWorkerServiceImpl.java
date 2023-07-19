@@ -1,5 +1,6 @@
 package com.ivchern.exchange_employers.Services.Card;
 
+import com.ivchern.exchange_employers.Common.Exception.ForbiddenException;
 import com.ivchern.exchange_employers.Common.Exception.IllegalArgument;
 import com.ivchern.exchange_employers.Common.Exception.NotFoundException;
 import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnRequest;
@@ -9,15 +10,19 @@ import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Model.User.OwnerDetails;
 import com.ivchern.exchange_employers.Repositories.RequestWorkerRepository;
+import com.ivchern.exchange_employers.Security.Services.SecurityService;
 import com.ivchern.exchange_employers.Services.Skill.SkillService;
 import com.ivchern.exchange_employers.Services.User.OwnerDetailServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -25,14 +30,18 @@ import java.util.*;
 @Slf4j
 public class RequestWorkerServiceImpl implements RequestWorkerService {
 
+    private static final Logger logger = LoggerFactory.getLogger(RequestWorkerServiceImpl.class);
+
     private final RequestWorkerRepository requestWorkerRepository;
     private final SkillService skillService;
     private final OwnerDetailServiceImpl ownerDetailService;
+    private final SecurityService securityService;
 
-    public RequestWorkerServiceImpl(RequestWorkerRepository requestWorkerRepository, SkillService skillService, OwnerDetailServiceImpl ownerDetailService) {
+    public RequestWorkerServiceImpl(RequestWorkerRepository requestWorkerRepository, SkillService skillService, OwnerDetailServiceImpl ownerDetailService, SecurityService securityService) {
         this.requestWorkerRepository = requestWorkerRepository;
         this.skillService = skillService;
         this.ownerDetailService = ownerDetailService;
+        this.securityService = securityService;
     }
 
     @Override
@@ -143,11 +152,18 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     }
 
     @Override
-    public void delete(Long id) {
-        var requestWorker = requestWorkerRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Card not found")
-        );
-        requestWorkerRepository.delete(requestWorker);
+    public void delete(Long id, Principal principal) {
+        var requestWorker = requestWorkerRepository.findById(id);
+        if(requestWorker.isPresent()) {
+            if (!securityService.isOwner(requestWorker.get().getOwnerId(), principal))
+                throw new ForbiddenException("There is no access to change the card");
+        }
+
+        if (requestWorker.isEmpty()) {
+            logger.error("Card not found with id: {}", id);
+            throw new NotFoundException("Card not found");
+        }
+        requestWorkerRepository.delete(requestWorker.get());
     }
 
     @Override
