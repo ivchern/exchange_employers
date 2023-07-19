@@ -26,6 +26,8 @@ import java.util.*;
 import java.util.Arrays;
 import java.util.Date;
 
+import static com.ivchern.exchange_employers.Model.User.ERole.ROLE_USER;
+
 //TODO: add liquidbase
 @SpringBootApplication
 @SecurityScheme(
@@ -43,12 +45,18 @@ public class ExchangeEmployersApplication {
 									  SkillRepository skillRepository, TeammateService teammateService,
 									  ResourcesController resourcesController, RequestWorkerController requestWorkerController) {
 		return (args) -> {
-			roleRepository.save(new Role(1, ERole.ROLE_USER));
-			roleRepository.save(new Role(2, ERole.ROLE_ADMIN));
-			roleRepository.save(new Role(3, ERole.ROLE_MODERATOR));
-			authController.registerUser(new User("test1", "test1@test.test", "123456"));
-			authController.registerUser(new User("test2", "test2@test.test", "123456"));
-			authController.registerUser(new User("test3", "test3@test.test", "123456"));
+				var user_role = roleRepository.save(new Role(1, ROLE_USER));
+				var admin_role = roleRepository.save(new Role(2, ERole.ROLE_ADMIN));
+				var moderation_role = roleRepository.save(new Role(3, ERole.ROLE_MODERATOR));
+			Set<Role> roles = new HashSet<>();
+			roles.add(user_role);
+			authController.registerUser(new User("test1", "test1@test.test", "123456", roles));
+			roles.clear();
+			roles.add(admin_role);
+			authController.registerUser(new User("test2", "test2@test.test", "123456", roles));
+			roles.clear();
+			roles.add(moderation_role);
+			authController.registerUser(new User("test3", "test3@test.test", "123456", roles));
 			UserDTO test1 = userController.getUserByUsername("test1").getBody();
 			UserDTO test2 = userController.getUserByUsername("test2").getBody();
 			UserDTO test3 = userController.getUserByUsername("test3").getBody();

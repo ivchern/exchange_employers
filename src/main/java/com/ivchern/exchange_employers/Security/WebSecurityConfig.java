@@ -60,15 +60,15 @@ public class WebSecurityConfig {
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests().
-            requestMatchers("/**").permitAll()
-//            requestMatchers("/api/auth/**",
-//                "/api/test/**",
-//                "/v3/**",
-//                "/configuration/ui",
-//                "/swagger-resources/**",
-//                "/configuration/security",
-//                "/swagger-ui/**",
-//                "/webjars/**").permitAll()
+//            requestMatchers("/**").permitAll()
+            requestMatchers("/api/auth/**",
+                "/api/test/**",
+                "/v3/**",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui/**",
+                "/webjars/**").permitAll()
             .anyRequest().authenticated();
 
     http.authenticationProvider(authenticationProvider());
