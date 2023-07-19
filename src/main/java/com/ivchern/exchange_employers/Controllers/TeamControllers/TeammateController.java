@@ -61,12 +61,11 @@ public class TeammateController {
     public Iterable<Teammate> getTeammateByOwnerId(@RequestParam Long id){
         return teammateService.findByOwnerId(id);
     }
-    //TODO:add getByOwnerId
+
     @DeleteMapping(path = "id", consumes = "application/json")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteTeammate(@RequestParam Long id){
         try {
-
             teammateService.delete(id);
         }catch (EmptyResultDataAccessException e) {};
     }

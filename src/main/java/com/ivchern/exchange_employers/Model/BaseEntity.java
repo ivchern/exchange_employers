@@ -1,5 +1,6 @@
 package com.ivchern.exchange_employers.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,11 +17,13 @@ public class BaseEntity {
     private Long id;
     @CreatedDate
     @Column(name = "created")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime created;
 
     @LastModifiedBy
     @Column(name = "updated")
     private LocalDateTime updated;
     @Enumerated(EnumType.STRING)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Status status;
 }

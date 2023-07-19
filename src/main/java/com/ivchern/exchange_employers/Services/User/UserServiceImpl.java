@@ -7,7 +7,7 @@ import com.ivchern.exchange_employers.Model.Team.Team;
 import com.ivchern.exchange_employers.Model.User.Contact;
 import com.ivchern.exchange_employers.Model.User.User;
 import com.ivchern.exchange_employers.Repositories.ContactRepository;
-import com.ivchern.exchange_employers.Repositories.UserDetailsRepository;
+import com.ivchern.exchange_employers.Repositories.OwnerDetailsRepository;
 import com.ivchern.exchange_employers.Repositories.UserRepository;
 import com.ivchern.exchange_employers.Services.Team.TeamService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +23,13 @@ public class UserServiceImpl implements UserService {
     private ContactRepository contactRepository;
     private UserRepository userRepository;
     private TeamService teamService;
-    private UserDetailsRepository userDetailsRepository;
+    private OwnerDetailsRepository ownerDetailsRepository;
 
-    public UserServiceImpl(ContactRepository contactRepository, UserRepository userRepository, TeamService teamService, UserDetailsRepository userDetailsRepository) {
+    public UserServiceImpl(ContactRepository contactRepository, UserRepository userRepository, TeamService teamService, OwnerDetailsRepository ownerDetailsRepository) {
         this.contactRepository = contactRepository;
         this.userRepository = userRepository;
         this.teamService = teamService;
-        this.userDetailsRepository = userDetailsRepository;
+        this.ownerDetailsRepository = ownerDetailsRepository;
     }
 
     @Override
@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService {
         List<Contact> contact = contactRepository.findAllByUserId(id);
         ModelMapper modelMapper = new ModelMapper();
 
-        var firstname = user.getOwnerDetail().getFirstname();
-        var lastname = user.getOwnerDetail().getLastname();
+        var firstname = user.getOwnerDetails().getFirstname();
+        var lastname = user.getOwnerDetails().getLastname();
 
         List<ContactDTO> userContacts = modelMapper.map(contact, new TypeToken<List<ContactDTO>>(){}.getType());
 
@@ -101,25 +101,21 @@ public class UserServiceImpl implements UserService {
         Optional<UserDTO> userDTOOpt;
 
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if(!userOpt.isPresent()){
+        if(userOpt.isEmpty()){
             userDTOOpt = Optional.empty();
             return userDTOOpt;
         }
         User user = userOpt.get();
         Team team;
         Optional<Team> teamOpt = teamService.findById(user.getId());
-        if (teamOpt.isPresent()) {
-            team = teamOpt.get();
-        }else{
-            team = null;
-        }
+        team = teamOpt.orElse(null);
         List<Contact> contact = contactRepository.findAllByUserId(user.getId());
         ModelMapper modelMapper = new ModelMapper();
 
         List<ContactDTO> userContacts = modelMapper.map(contact, new TypeToken<List<ContactDTO>>(){}.getType());
 
-        var firstname = user.getOwnerDetail().getFirstname();
-        var lastname = user.getOwnerDetail().getLastname();
+        var firstname = user.getOwnerDetails().getFirstname();
+        var lastname = user.getOwnerDetails().getLastname();
 
         if(team != null){
             userDTOOpt = Optional.ofNullable(new UserDTO(user.getId(), user.getUsername(), firstname, user.getEmail(),
@@ -143,9 +139,9 @@ public class UserServiceImpl implements UserService {
             contactRepository.findByUserIdAndTypeContact(id, contact.getTypeContact()).
                     ifPresent(contact1 -> contact.setId(contact1.getId()));
         });
-        var userDetailsOpt = userDetailsRepository.findById(id);
+        var userDetailsOpt = ownerDetailsRepository.findById(id);
         var userDetails = userDetailsOpt.get();
         userDetails.setContacts(new HashSet<>(userContacts));
-        userDetailsRepository.save(userDetails);
+        ownerDetailsRepository.save(userDetails);
     }
 }

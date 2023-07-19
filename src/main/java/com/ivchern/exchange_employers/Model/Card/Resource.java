@@ -1,15 +1,13 @@
 package com.ivchern.exchange_employers.Model.Card;
 
 import com.ivchern.exchange_employers.Model.BaseEntity;
-import com.ivchern.exchange_employers.Model.Team.Skill;
-import com.ivchern.exchange_employers.Model.User.OwnerDetail;
+import com.ivchern.exchange_employers.Model.User.OwnerDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @Entity
@@ -34,6 +32,6 @@ public class Resource extends BaseEntity {
     private Long teammateId;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private OwnerDetail ownerDetail;
+    private OwnerDetails ownerDetails;
 }
 

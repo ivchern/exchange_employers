@@ -6,13 +6,15 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Repository
 public interface SkillRepository extends JpaRepository<Skill, Long>, JpaSpecificationExecutor<Skill> {
-    @Query(value = "SELECT s FROM skill s WHERE s.skill_name = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM skill s WHERE s.skill_name = ?1", nativeQuery = true)
     Optional<Skill> findByName(String skillName);
 
     @Query(value = "SELECT * FROM skill s WHERE s.skill_name in (:names)", nativeQuery = true)

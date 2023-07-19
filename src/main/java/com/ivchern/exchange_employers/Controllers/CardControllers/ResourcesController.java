@@ -82,7 +82,6 @@ public class ResourcesController {
     public ResourceDtoOnRequest setResources(@RequestBody ResourceDtoOnCreate resource){
         return resourceService.save(resource);
     }
-
     @GetMapping(path= "/{id}")
     public ResponseEntity<ResourceDtoOnRequest> getResourceById(@PathVariable("id") Long id){
         Optional<ResourceDtoOnRequest> optResource = resourceService.findById(id);

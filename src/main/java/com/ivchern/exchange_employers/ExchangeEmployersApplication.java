@@ -4,7 +4,7 @@ import com.ivchern.exchange_employers.Controllers.AuthController;
 import com.ivchern.exchange_employers.Controllers.CardControllers.RequestWorkerController;
 import com.ivchern.exchange_employers.Controllers.CardControllers.ResourcesController;
 import com.ivchern.exchange_employers.Controllers.UserController;
-import com.ivchern.exchange_employers.DTO.CardDTO.RequestWorkerDtoOnCreate;
+import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnSave;
 import com.ivchern.exchange_employers.DTO.CardDTO.ResourceDtoOnCreate;
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeammateDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.ContactDTO;
@@ -94,7 +94,7 @@ public class ExchangeEmployersApplication {
 			skillRepository.save(new Skill(6L, "Flutter", "Flutter desc"));
 			skillRepository.save(new Skill(7L, "Maven", "Maven desc"));
 			skillRepository.save(new Skill(8L, "Spring", "Spring desc"));
-			skillRepository.save(new Skill(8L, "Kafka", "Kafka desc"));
+			skillRepository.save(new Skill(9L, "Kafka", "Kafka desc"));
 
 			teammateService.save(new TeammateDTO("Ivan",  "Ivanov", "Java Developer", "Senior",1L, 1L
 					, new HashSet<String>(Arrays.asList("Java", "SQL", "Maven", "Kafka"))));
@@ -124,7 +124,7 @@ public class ExchangeEmployersApplication {
 			resourcesController.setResources(new ResourceDtoOnCreate("React Developer", "From Home",
 					new Date(123,8,12), new Date(123,9,1), 4L, 2L));
 
-			var request1 = new RequestWorkerDtoOnCreate(
+			var request1 = new RequestWorkerDtoOnSave(
 					"Java Developer",
 					"Time Squ Build",
 					"Senior",
@@ -134,7 +134,7 @@ public class ExchangeEmployersApplication {
 					false,new HashSet<>(
 					Arrays.asList("React", "SQL", "Maven")), 3L);
 
-			var request2= new RequestWorkerDtoOnCreate(
+			var request2= new RequestWorkerDtoOnSave(
 					"React Developer 1",
 					"Time Squ Build",
 					"Junior",
@@ -145,7 +145,7 @@ public class ExchangeEmployersApplication {
 					Arrays.asList("React", "SQL", "Maven")), 2L);
 
 
-			var request3 = new RequestWorkerDtoOnCreate(
+			var request3 = new RequestWorkerDtoOnSave(
 					"IOS Developer",
 					"Зеленый банк",
 					"Middle",
@@ -155,14 +155,14 @@ public class ExchangeEmployersApplication {
 					false,new HashSet<>(
 					Arrays.asList("React", "IOS", "Flutter")), 2L);
 
-			var request4 =new RequestWorkerDtoOnCreate(
+			var request4 = new RequestWorkerDtoOnSave(
 					"React Developer 1",
 					"New Mihio",
 					"Middle",
 					"GO MEET",
 					"From Home",
 					new Date(125, 01,01),
-					false,new HashSet<>(
+					false, new HashSet<>(
 					Arrays.asList("React", "SQL", "Java")), 1L);
 
 			var resResource1 = requestWorkerController.postRequest(request1);

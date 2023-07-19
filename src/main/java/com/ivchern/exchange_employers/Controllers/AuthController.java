@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import com.ivchern.exchange_employers.Model.User.ERole;
 import com.ivchern.exchange_employers.Model.User.Role;
 import com.ivchern.exchange_employers.Model.User.User;
-import com.ivchern.exchange_employers.Model.User.OwnerDetail;
+import com.ivchern.exchange_employers.Model.User.OwnerDetails;
 import com.ivchern.exchange_employers.Repositories.RoleRepository;
-import com.ivchern.exchange_employers.Repositories.UserDetailsRepository;
+import com.ivchern.exchange_employers.Repositories.OwnerDetailsRepository;
 import com.ivchern.exchange_employers.Repositories.UserRepository;
 import com.ivchern.exchange_employers.DTO.Payload.Request.LoginRequest;
 import com.ivchern.exchange_employers.DTO.Payload.Response.JwtResponse;
@@ -47,7 +47,7 @@ public class AuthController {
   RoleRepository roleRepository;
 
   @Autowired
-  UserDetailsRepository userDetailsRepository;
+  OwnerDetailsRepository ownerDetailsRepository;
 
   @Autowired
   PasswordEncoder encoder;
@@ -125,10 +125,10 @@ public class AuthController {
       });
     }
 
-    OwnerDetail userRep = new OwnerDetail();
+    OwnerDetails userRep = new OwnerDetails();
     userRep.setFirstname("Unknown");
     userRep.setLastname("Unknown");
-    userDetailsRepository.save(userRep);
+    ownerDetailsRepository.save(userRep);
 
     user.setRoles(roles);
     log.info(user.toString());

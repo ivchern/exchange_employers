@@ -6,10 +6,10 @@ import com.ivchern.exchange_employers.Model.Card.Resource;
 import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Model.Team.Teammate;
-import com.ivchern.exchange_employers.Model.User.OwnerDetail;
+import com.ivchern.exchange_employers.Model.User.OwnerDetails;
 import com.ivchern.exchange_employers.Repositories.ResourceRepository;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
-import com.ivchern.exchange_employers.Repositories.UserDetailsRepository;
+import com.ivchern.exchange_employers.Repositories.OwnerDetailsRepository;
 import com.ivchern.exchange_employers.Services.Teammate.TeammateService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,13 +28,13 @@ public class ResourceServiceImpl implements ResourceService {
     private TeammateService teammateService;
     private ResourceRepository resourceRepository;
     private SkillRepository skillRepository;
-    private UserDetailsRepository userDetailsRepository;
+    private OwnerDetailsRepository ownerDetailsRepository;
 
-    public ResourceServiceImpl(TeammateService teammateService, ResourceRepository resourceRepository, SkillRepository skillRepository, UserDetailsRepository userDetailsRepository) {
+    public ResourceServiceImpl(TeammateService teammateService, ResourceRepository resourceRepository, SkillRepository skillRepository, OwnerDetailsRepository ownerDetailsRepository) {
         this.teammateService = teammateService;
         this.resourceRepository = resourceRepository;
         this.skillRepository = skillRepository;
-        this.userDetailsRepository = userDetailsRepository;
+        this.ownerDetailsRepository = ownerDetailsRepository;
     }
 
 
@@ -51,9 +51,9 @@ public class ResourceServiceImpl implements ResourceService {
         resourceSave.setCreated(LocalDateTime.now());
         resourceSave.setUpdated(LocalDateTime.now());
 
-        var userDetailOpt = userDetailsRepository.findById(resource.getOwnerId());
-        OwnerDetail ownerDetail = userDetailOpt.get();
-        resourceSave.setOwnerDetail(ownerDetail);
+        var userDetailOpt = ownerDetailsRepository.findById(resource.getOwnerId());
+        OwnerDetails ownerDetails = userDetailOpt.get();
+        resourceSave.setOwnerDetails(ownerDetails);
 
         Resource resourceUpd = resourceRepository.save(resourceSave);
         return getResourceDTOEntity(resourceUpd);

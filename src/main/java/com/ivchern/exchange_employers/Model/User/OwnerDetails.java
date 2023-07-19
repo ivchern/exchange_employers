@@ -1,5 +1,7 @@
 package com.ivchern.exchange_employers.Model.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ivchern.exchange_employers.Model.Card.RequestWorker;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -11,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user_details")
 @Data
-public class OwnerDetail {
+public class OwnerDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
@@ -27,5 +29,7 @@ public class OwnerDetail {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "contact_id"))
     private Set<Contact> contacts = new HashSet<>();
+//    @JsonManagedReference(value = "owner_id")
+//    public List<RequestWorker> requestWorkers;
 
 }

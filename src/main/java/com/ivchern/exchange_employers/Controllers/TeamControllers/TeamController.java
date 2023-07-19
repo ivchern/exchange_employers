@@ -18,11 +18,9 @@ import java.util.Optional;
 public class TeamController {
 
     private TeamService teamService;
-
     public TeamController(TeamService teamService) {
         this.teamService = teamService;
     }
-
 
     @GetMapping
     Iterable<Team> getTeammate(){
@@ -32,10 +30,6 @@ public class TeamController {
     @GetMapping("/{id}")
     public ResponseEntity<Team> getTeamById(@PathVariable("id") Long id){
         Optional<Team> optTeam = teamService.findById(id);
-        if (optTeam.isPresent()){
-            return new ResponseEntity<Team>(optTeam.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+        return optTeam.map(team -> new ResponseEntity<>(team, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 }

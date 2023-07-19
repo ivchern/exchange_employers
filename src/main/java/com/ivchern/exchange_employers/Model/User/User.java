@@ -26,7 +26,7 @@ public class User {
 
     @OneToOne
     @PrimaryKeyJoinColumn
-    private OwnerDetail ownerDetail;
+    private OwnerDetails ownerDetails;
 
     @NotBlank
     @Size(max = 50)

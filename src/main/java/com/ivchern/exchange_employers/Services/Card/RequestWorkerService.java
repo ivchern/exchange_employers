@@ -1,17 +1,18 @@
 package com.ivchern.exchange_employers.Services.Card;
 
-import com.ivchern.exchange_employers.DTO.CardDTO.RequestWorkerDtoOnCreate;
+import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnSave;
+import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnRequest;
 import com.ivchern.exchange_employers.Model.Card.RequestWorker;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface RequestWorkerService {
-    Iterable<RequestWorker> findAll();
-    RequestWorker save(RequestWorkerDtoOnCreate resource);
-    RequestWorker update(RequestWorker requestWorker);
-    Optional<RequestWorker> findById(Long id);
+    List<RequestWorkerDtoOnRequest> findAll(Pageable paging);
+    RequestWorker save(RequestWorkerDtoOnSave resource);
+    RequestWorker update(Long id, RequestWorkerDtoOnSave requestWorker);
+    RequestWorkerDtoOnRequest findById(Long id);
     void delete(Long id);
-    Iterable<RequestWorker> findAll(Specification<RequestWorker> specRequest, Pageable paging);
+    List<RequestWorkerDtoOnRequest> findAll(Specification<RequestWorker> specRequest, Pageable paging);
 }

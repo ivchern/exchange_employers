@@ -11,7 +11,6 @@ import java.util.List;
 @Configuration
 @EnableTransactionManagement
 public class JpaConfiguration implements WebMvcConfigurer {
-
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new SpecificationArgumentResolver());

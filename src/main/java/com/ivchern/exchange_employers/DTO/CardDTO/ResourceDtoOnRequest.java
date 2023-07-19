@@ -1,20 +1,15 @@
 package com.ivchern.exchange_employers.DTO.CardDTO;
 
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeammateCardDTO;
-import com.ivchern.exchange_employers.Model.Card.Rank;
 import com.ivchern.exchange_employers.Model.Status;
-import com.ivchern.exchange_employers.Model.Team.Skill;
-import com.ivchern.exchange_employers.Model.User.OwnerDetail;
-import jakarta.persistence.Column;
+import com.ivchern.exchange_employers.Model.User.OwnerDetails;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -33,5 +28,5 @@ public class ResourceDtoOnRequest extends TeammateCardDTO {
     private LocalDateTime created;
     private LocalDateTime updated;
     private Status status;
-    private OwnerDetail ownerDetail;
+    private OwnerDetails ownerDetail;
 }
