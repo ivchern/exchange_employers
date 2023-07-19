@@ -1,7 +1,5 @@
 package com.ivchern.exchange_employers.Common.Exception;
 
-import com.ivchern.exchange_employers.Common.ErrorCodeEnum;
-
 public class ForbiddenException extends RuntimeException {
 
         public ForbiddenException() {
@@ -14,14 +12,6 @@ public class ForbiddenException extends RuntimeException {
          */
         public ForbiddenException(String msg) {
             super(msg);
-        }
-
-        /**
-         * Constructs a new runtime exception with {@code null} as its detail message.  The cause is not
-         * initialized, and may subsequently be initialized by a call to {@link #initCause}.
-         */
-        public ForbiddenException(ErrorCodeEnum errorCodeEnum) {
-            super(errorCodeEnum.getMsg());
         }
 
     }

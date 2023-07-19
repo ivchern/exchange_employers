@@ -1,6 +1,7 @@
 package com.ivchern.exchange_employers.Security.jwt;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     final Map<String, Object> body = new HashMap<>();
     body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-    body.put("error", "Unauthorized");
+    body.put("date", LocalDateTime.now());
     body.put("message", authException.getMessage());
     body.put("path", request.getServletPath());
 

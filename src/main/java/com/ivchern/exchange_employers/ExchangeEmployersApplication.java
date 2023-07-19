@@ -26,6 +26,8 @@ import java.util.*;
 import java.util.Arrays;
 import java.util.Date;
 
+import static com.ivchern.exchange_employers.Model.User.ERole.ROLE_USER;
+
 //TODO: add liquidbase
 @SpringBootApplication
 @SecurityScheme(
@@ -43,12 +45,18 @@ public class ExchangeEmployersApplication {
 									  SkillRepository skillRepository, TeammateService teammateService,
 									  ResourcesController resourcesController, RequestWorkerController requestWorkerController) {
 		return (args) -> {
-			roleRepository.save(new Role(1, ERole.ROLE_USER));
-			roleRepository.save(new Role(2, ERole.ROLE_ADMIN));
-			roleRepository.save(new Role(3, ERole.ROLE_MODERATOR));
-			authController.registerUser(new User("test1", "test1@test.test", "123456"));
-			authController.registerUser(new User("test2", "test2@test.test", "123456"));
-			authController.registerUser(new User("test3", "test3@test.test", "123456"));
+				var user_role = roleRepository.save(new Role(1, ROLE_USER));
+				var admin_role = roleRepository.save(new Role(2, ERole.ROLE_ADMIN));
+				var moderation_role = roleRepository.save(new Role(3, ERole.ROLE_MODERATOR));
+			Set<Role> roles = new HashSet<>();
+			roles.add(user_role);
+			authController.registerUser(new User("test1", "test1@test.test", "123456", roles));
+			roles.clear();
+			roles.add(admin_role);
+			authController.registerUser(new User("test2", "test2@test.test", "123456", roles));
+			roles.clear();
+			roles.add(moderation_role);
+			authController.registerUser(new User("test3", "test3@test.test", "123456", roles));
 			UserDTO test1 = userController.getUserByUsername("test1").getBody();
 			UserDTO test2 = userController.getUserByUsername("test2").getBody();
 			UserDTO test3 = userController.getUserByUsername("test3").getBody();
@@ -132,7 +140,7 @@ public class ExchangeEmployersApplication {
 					"From Home",
 					new Date(125, 01,01),
 					false,new HashSet<>(
-					Arrays.asList("React", "SQL", "Maven")), 3L);
+					Arrays.asList("React", "SQL", "Maven")), 1L);
 
 			var request2= new RequestWorkerDtoOnSave(
 					"React Developer 1",
@@ -166,9 +174,9 @@ public class ExchangeEmployersApplication {
 					Arrays.asList("React", "SQL", "Java")), 1L);
 
 			var resResource1 = requestWorkerController.postRequest(request1);
-			var resResource2 = requestWorkerController.postRequest(request1);
-			var resResource3 = requestWorkerController.postRequest(request1);
-			var resResource4 = requestWorkerController.postRequest(request1);
+			var resResource2 = requestWorkerController.postRequest(request2);
+			var resResource3 = requestWorkerController.postRequest(request3);
+			var resResource4 = requestWorkerController.postRequest(request4);
 		};
 	}
 }

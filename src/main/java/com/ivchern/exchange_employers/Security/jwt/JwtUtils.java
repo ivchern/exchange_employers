@@ -1,6 +1,7 @@
 package com.ivchern.exchange_employers.Security.jwt;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import com.ivchern.exchange_employers.Security.Services.UserDetailsImpl;
 import org.slf4j.Logger;
@@ -9,11 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
+import org.springframework.security.core.GrantedAuthority;
 
 @Component
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-
+  private static final String AUTHORITIES_CLAIM = "authorities";
   @Value("${jwt.token.secret}")
   private String jwtSecret;
 
@@ -23,13 +25,22 @@ public class JwtUtils {
   public String generateJwtToken(Authentication authentication) {
 
     UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
+    String authorities = getUserAuthorities(userPrincipal);
     return Jwts.builder()
         .setSubject((userPrincipal.getUsername()))
         .setIssuedAt(new Date())
         .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
         .signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .claim(AUTHORITIES_CLAIM, authorities)
         .compact();
+  }
+
+  private String getUserAuthorities(UserDetailsImpl customUserDetails) {
+    return customUserDetails
+            .getAuthorities()
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
   }
 
   public String getUserNameFromJwtToken(String token) {
