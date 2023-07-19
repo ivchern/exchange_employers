@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.ivchern.exchange_employers.Common.Exception.NotFoundException;
 import com.ivchern.exchange_employers.Model.User.ERole;
 import com.ivchern.exchange_employers.Model.User.Role;
 import com.ivchern.exchange_employers.Model.User.User;
@@ -95,35 +96,28 @@ public class AuthController {
                signUpRequest.getEmail(),
                encoder.encode(signUpRequest.getPassword()));
 
-    Set<String> strRoles = signUpRequest.getRoles().stream().map(role -> role.toString()).collect(Collectors.toSet());
+//    Set<String> strRoles = signUpRequest.getRoles().stream().map(Role::toString).collect(Collectors.toSet());
     Set<Role> roles = new HashSet<>();
 
-    if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
-    } else {
-      strRoles.forEach(role -> {
-        switch (role) {
-          case "admin":
-            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
-
-            break;
-          case "mod":
-            Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(modRole);
-
-            break;
-          default:
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
+    signUpRequest.getRoles().forEach(role -> {
+      switch (role.getName()) {
+        case ROLE_ADMIN -> {
+          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                  .orElseThrow(() -> new NotFoundException("Role is not found."));
+          roles.add(adminRole);
         }
-      });
-    }
+        case ROLE_MODERATOR -> {
+          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                  .orElseThrow(() -> new NotFoundException("Role is not found."));
+          roles.add(modRole);
+        }
+        default -> {
+          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                  .orElseThrow(() -> new NotFoundException("Role is not found."));
+          roles.add(userRole);
+        }
+      }
+    });
 
     OwnerDetails userRep = new OwnerDetails();
     userRep.setFirstname("Unknown");

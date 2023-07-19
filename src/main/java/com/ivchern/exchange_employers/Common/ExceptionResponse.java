@@ -11,5 +11,5 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ExceptionResponse {
     private LocalDate date;
-    private String message;
+    private String error;
 }
