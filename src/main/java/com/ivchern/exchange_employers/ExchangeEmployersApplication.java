@@ -139,9 +139,14 @@ public class ExchangeEmployersApplication {
 					"Created new Fine project",
 					"From Home",
 					new Date(125, 01,01),
-					false,new HashSet<>(
-					Arrays.asList("React", "SQL", "Maven")), 1L);
-
+					false,
+					new HashSet<Skill>(
+							Arrays.asList(
+									new Skill(1L, "React", ""),
+									new Skill(2L, "Flutter", ""),
+									new Skill(3L, "SQL", "")
+							)),
+					1L);
 			var request2= new RequestWorkerDtoOnSave(
 					"React Developer 1",
 					"Time Squ Build",
@@ -149,8 +154,11 @@ public class ExchangeEmployersApplication {
 					"Created new Fine project",
 					"From Home",
 					new Date(125, 01,01),
-					false,new HashSet<>(
-					Arrays.asList("React", "SQL", "Maven")), 2L);
+					false, new HashSet<Skill>(
+					Arrays.asList(
+							new Skill(1L, "React", ""),
+							new Skill(2L, "Flutter", "")
+					)), 2L);
 
 
 			var request3 = new RequestWorkerDtoOnSave(
@@ -160,8 +168,12 @@ public class ExchangeEmployersApplication {
 					"Mobile Developer",
 					"From Home",
 					new Date(125, 01,01),
-					false,new HashSet<>(
-					Arrays.asList("React", "IOS", "Flutter")), 2L);
+					false,new HashSet<Skill>(
+					Arrays.asList(
+							new Skill(1L, "React", ""),
+							new Skill(2L, "IOS", ""),
+							new Skill(3L, "Flutter", "")
+					)), 2L);
 
 			var request4 = new RequestWorkerDtoOnSave(
 					"React Developer 1",
@@ -170,8 +182,12 @@ public class ExchangeEmployersApplication {
 					"GO MEET",
 					"From Home",
 					new Date(125, 01,01),
-					false, new HashSet<>(
-					Arrays.asList("React", "SQL", "Java")), 1L);
+					false,new HashSet<Skill>(
+					Arrays.asList(
+							new Skill(1L, "React", ""),
+							new Skill(2L, "SQL", ""),
+							new Skill(3L, "Java", "")
+					)), 1L);
 
 			var resResource1 = requestWorkerController.postRequest(request1);
 			var resResource2 = requestWorkerController.postRequest(request2);

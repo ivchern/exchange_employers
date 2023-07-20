@@ -14,10 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import net.kaczmarzyk.spring.data.jpa.domain.Equal;
-import net.kaczmarzyk.spring.data.jpa.domain.GreaterThanOrEqual;
-import net.kaczmarzyk.spring.data.jpa.domain.In;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.domain.*;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
@@ -47,10 +44,11 @@ public class RequestWorkerController {
     public RequestWorkerController(RequestWorkerService requestWorkerService) {
         this.requestWorkerService = requestWorkerService;
     }
-    @GetMapping(path = "/search")
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Success!"),
                    @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired")})
-    @Operation( description = "Поиск ресуросв",
+    @Operation( description = "Получение и поиск всех доступных ресурсов",
             parameters = {
             @Parameter(name =  "jobTitle", description  = "Поиск заголовка по маске", example = "IOS Dev",
                     schema = @Schema(type = "string")),
@@ -63,8 +61,8 @@ public class RequestWorkerController {
                     schema = @Schema(type = "string")),
             @Parameter(name =  "isInterviewNeeded", description  = "Необходимоcть интервью", example = "false",
                     schema = @Schema(type = "string")),
-            @Parameter(name =  "needBefore", description  = "Нужен после. Позже, чем",
-                    example = "2024-09-01", schema = @Schema(type = "string")),
+            @Parameter(name =  "needBefore", description  = "Нужен до. Раньше, чем",
+                    example = "2025-09-01", schema = @Schema(type = "string")),
             @Parameter(name =  "skill", description  = "Поиск по навывкам. Включение", schema = @Schema(type = "array"))})
     public List<RequestWorkerDtoOnRequest> searchRequests(
             @RequestParam(defaultValue= "0", required = false) Integer page,
@@ -78,28 +76,13 @@ public class RequestWorkerController {
                     @Spec(path = "rank", params = "rank", spec = In.class),
                     @Spec(path = "description", params = "description", spec = Like.class),
                     @Spec(path = "locationWorked", params = "locationWorked", spec = Equal.class),
-                    @Spec(path = "needBefore", params = "needBefore", spec = GreaterThanOrEqual.class),
+                    @Spec(path = "needBefore", params = "needBefore", spec = LessThanOrEqual.class),
                     @Spec(path = "isInterviewNeeded", params = "isInterviewNeeded", spec = Equal.class),
                     @Spec(path = "r.skill", params = "skill", spec = In.class)
             })
             Specification<RequestWorker> SpecRequest){
         Pageable paging = PageRequest.of(page, pageSize,  Sort.by(sortBy));
         return requestWorkerService.findAll(SpecRequest, paging);
-    }
-
-    @GetMapping()
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "Success!"),
-                  @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired",
-                          content = { @Content(mediaType = "application/json",
-                                  schema = @Schema(implementation = ExceptionResponse.class))})})
-    @Operation(description = "Получение всех доступных ресурсов")
-    public List<RequestWorkerDtoOnRequest> getRequests(
-            @RequestParam(defaultValue= "0", required = false) Integer page,
-            @RequestParam(defaultValue= "10", required = false) Integer pageSize,
-            @RequestParam(defaultValue= "id", required = false) String sortBy){
-        Pageable paging = PageRequest.of(page, pageSize, Sort.by(sortBy));
-        return  requestWorkerService.findAll(paging);
     }
 
     @GetMapping(path= "/{id}")
@@ -144,6 +127,7 @@ public class RequestWorkerController {
                                     @RequestBody RequestWorkerDtoOnSave request) {
         return requestWorkerService.update(id, request);
     }
+
     @DeleteMapping(path = "/{id}",  produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удаление карточки запроса ресурса")

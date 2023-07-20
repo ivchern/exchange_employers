@@ -31,7 +31,6 @@ import java.util.*;
 public class RequestWorkerServiceImpl implements RequestWorkerService {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestWorkerServiceImpl.class);
-
     private final RequestWorkerRepository requestWorkerRepository;
     private final SkillService skillService;
     private final OwnerDetailServiceImpl ownerDetailService;
@@ -78,9 +77,9 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         );
 
         Set<Skill> skills = new HashSet<>();
-        for (String skill : requestDto.getSkills()) {
-            Optional<Skill> skillOpt = skillService.findByName(skill);
-            skills.add(skillOpt.orElseThrow( () -> new IllegalArgument("Skill not found")));
+        for (Skill skill : requestDto.getSkills()) {
+            Optional<Skill> skillOpt = skillService.findByName(skill.getSkill());
+            skills.add(skillOpt.orElseThrow( () -> new IllegalArgument("Skill not found: " + skill.getSkill())));
         }
 
         requestWorker.setSkills(skills);
@@ -97,7 +96,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     @Override
     public RequestWorker update(Long id, RequestWorkerDtoOnSave requestWorker) {
         var savedRequest = requestWorkerRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Card not found"));
+                () -> new NotFoundException("Card not found with id: " + id));
 
         if(requestWorker.getJobTitle() != null){
             savedRequest.setJobTitle(requestWorker.getJobTitle());
@@ -127,9 +126,9 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         }
 
         Set<Skill> skills = new HashSet<>();
-        for (String skill : requestWorker.getSkills()) {
-            Optional<Skill> skillOpt = skillService.findByName(skill);
-            skills.add(skillOpt.orElseThrow( () -> new IllegalArgument("Skill not found")));
+        for (Skill skill : requestWorker.getSkills()) {
+            Optional<Skill> skillOpt = skillService.findByName(skill.getSkill());
+            skills.add(skillOpt.orElseThrow( () -> new IllegalArgument("Skill not found: "  + skill.getSkill())));
         }
         savedRequest.setSkills(skills);
 
@@ -141,7 +140,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     public RequestWorkerDtoOnRequest findById(Long id) {
         ModelMapper modelMapper = new ModelMapper();
         var requestWorker = requestWorkerRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Card not found")
+                () -> new NotFoundException("Card not found with id: " + id)
         );
         var requestWorkerDtoOnRequest = modelMapper.map(requestWorker, RequestWorkerDtoOnRequest.class);
         var ownerDetail = ownerDetailService.findByOwnerId(requestWorker.getOwnerId()).orElseThrow(
@@ -160,8 +159,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         }
 
         if (requestWorker.isEmpty()) {
-            logger.error("Card not found with id: {}", id);
-            throw new NotFoundException("Card not found");
+            throw new NotFoundException("Card not found with id: " + id);
         }
         requestWorkerRepository.delete(requestWorker.get());
     }

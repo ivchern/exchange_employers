@@ -1,5 +1,6 @@
 package com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO;
 
+import com.ivchern.exchange_employers.Model.Team.Skill;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -24,8 +25,10 @@ public class RequestWorkerDtoOnSave {
     Date needBefore;
     @Schema(description = "Необходимость интерью у заказчика", example = "true")
     boolean isInterviewNeeded;
-    @Schema(description = "Требуемые скиллы", type = "array", example = "[\"Java\", \"Kafka\", \"Maven\"]")
-    private Set<String> skills;
+    @Schema(description = "Требуемые скиллы", type = "array", example = "[{ \"id\": 0, \"skill\": \"Kafka\", \"description\": \"any\" }]")
+    //
+//    @Schema(description = "Требуемые скиллы", type = "array", example = "[\"{Java}\", \"Kafka\", \"Maven\"]")
+    private Set<Skill> skills;
     @Schema(description = "Владелец карточки", example = "2")
     private Long ownerId;
 }

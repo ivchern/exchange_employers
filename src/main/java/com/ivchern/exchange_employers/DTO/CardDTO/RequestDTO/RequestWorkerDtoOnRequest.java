@@ -23,7 +23,6 @@ public class RequestWorkerDtoOnRequest{
     @Schema(description = "Требуется до", example = "2024-01-01", type = "string")
     private Date needBefore;
     boolean isInterviewNeeded;
-    private Long ownerId;
     private OwnerDetails ownerDetail;
     private Set<Skill> skills;
 }
