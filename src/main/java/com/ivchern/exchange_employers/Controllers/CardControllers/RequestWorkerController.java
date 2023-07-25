@@ -18,6 +18,7 @@ import net.kaczmarzyk.spring.data.jpa.domain.*;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -61,7 +62,7 @@ public class RequestWorkerController {
             @Parameter(name =  "needBefore", description  = "Нужен до. Раньше, чем",
                     example = "2025-09-01", schema = @Schema(type = "string")),
             @Parameter(name =  "skill", description  = "Поиск по навывкам. Включение", schema = @Schema(type = "array"))})
-    public List<RequestWorkerDtoOnRequest> searchRequests(
+    public Page<RequestWorkerDtoOnRequest> searchRequests(
             @RequestParam(defaultValue= "0", required = false) Integer page,
             @RequestParam(defaultValue= "10", required = false) Integer pageSize,
             @RequestParam(defaultValue= "id", required = false) String sortBy,
@@ -122,8 +123,9 @@ public class RequestWorkerController {
                     content = { @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExceptionResponse.class))})})
     public RequestWorker putRequest(@PathVariable("id") Long id,
-                                    @RequestBody RequestWorkerDtoOnSave request) {
-        return requestWorkerService.update(id, request);
+                                    @RequestBody RequestWorkerDtoOnSave request,
+                                    Principal principal) {
+        return requestWorkerService.update(id, request, principal);
     }
 
     @DeleteMapping(path = "/{id}",  produces = MediaType.APPLICATION_JSON_VALUE)

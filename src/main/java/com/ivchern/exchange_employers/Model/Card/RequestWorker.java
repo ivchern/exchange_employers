@@ -3,6 +3,7 @@ package com.ivchern.exchange_employers.Model.Card;
 import com.fasterxml.jackson.annotation.*;
 import com.ivchern.exchange_employers.Model.BaseEntity;
 import com.ivchern.exchange_employers.Model.Team.Skill;
+import com.ivchern.exchange_employers.Model.User.OwnerDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -37,8 +38,11 @@ public class RequestWorker extends BaseEntity {
     private Date needBefore;
     @Column(name = "interview_customer")
     private boolean isInterviewNeeded;
-    @Column(name = "owner_id")
-    private Long ownerId;
+//    @Column(name = "owner_id")
+//    private Long ownerId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private OwnerDetails ownerDetails;
     @ManyToMany
     @Column(name = "skills")
     @JoinTable(name = "request_skills",

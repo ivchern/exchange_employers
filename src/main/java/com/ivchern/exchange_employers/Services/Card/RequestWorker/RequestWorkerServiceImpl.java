@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -43,20 +44,20 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         this.securityService = securityService;
     }
 
-    @Override
-    public List<RequestWorkerDtoOnRequest> findAll(Pageable paging) {
-        List<RequestWorker> requestWorker = requestWorkerRepository.findAll(paging);
-        ModelMapper  modelMapper = new ModelMapper();
-
-        List<RequestWorkerDtoOnRequest> requestWorkerDtoOnRequest = new ArrayList<>();
-        for (RequestWorker request : requestWorker) {
-            var requestDto = modelMapper.map(request, RequestWorkerDtoOnRequest.class);
-            Optional<OwnerDetails> userDetailOpt = ownerDetailService.findByOwnerId(request.getOwnerId());
-            userDetailOpt.ifPresent(requestDto::setOwnerDetail);
-            requestWorkerDtoOnRequest.add(requestDto);
-        }
-        return requestWorkerDtoOnRequest;
-    }
+//    @Override
+//    public List<RequestWorkerDtoOnRequest> findAll(Pageable paging) {
+//        List<RequestWorker> requestWorker = requestWorkerRepository.findAll(paging);
+//        ModelMapper  modelMapper = new ModelMapper();
+//
+//        List<RequestWorkerDtoOnRequest> requestWorkerDtoOnRequest = new ArrayList<>();
+//        for (RequestWorker request : requestWorker) {
+//            var requestDto = modelMapper.map(request, RequestWorkerDtoOnRequest.class);
+////            Optional<OwnerDetails> userDetailOpt = ownerDetailService.findByOwnerId(request.getOwnerId());
+////            userDetailOpt.ifPresent(requestDto::setOwnerDetail);
+//            requestWorkerDtoOnRequest.add(requestDto);
+//        }
+//        return requestWorkerDtoOnRequest;
+//    }
 
     @Override
     @Transactional
@@ -68,13 +69,13 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
             throw new IllegalArgument("Job title not found");
         }
 
-        if(requestWorker.getOwnerId() == null){
+        if(requestDto.getOwnerId() == null){
             throw new IllegalArgument("Owner a card not found");
         }
 
-        ownerDetailService.findByOwnerId(requestWorker.getOwnerId()).orElseThrow(
+        requestWorker.setOwnerDetails(ownerDetailService.findByOwnerId(requestDto.getOwnerId()).orElseThrow(
                 () -> new IllegalArgument("Owner a card not found")
-        );
+        ));
 
         Set<Skill> skills = new HashSet<>();
         for (Skill skill : requestDto.getSkills()) {
@@ -94,9 +95,15 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     }
 
     @Override
-    public RequestWorker update(Long id, RequestWorkerDtoOnSave requestWorker) {
-        var savedRequest = requestWorkerRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Card not found with id: " + id));
+    public RequestWorker update(Long id, RequestWorkerDtoOnSave requestWorker, Principal principal) {
+        var savedRequestOpt = requestWorkerRepository.findById(id);
+        if(savedRequestOpt.isPresent()) {
+            if (!securityService.isOwner(savedRequestOpt.get().getOwnerDetails().getId(), principal))
+                throw new ForbiddenException("There is no access to change the card");
+        }
+        var savedRequest = savedRequestOpt.orElseThrow(() ->
+                new NotFoundException("Card not found with id: " + id)
+        );
 
         if(requestWorker.getJobTitle() != null){
             savedRequest.setJobTitle(requestWorker.getJobTitle());
@@ -122,7 +129,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
              var ownerDetail = ownerDetailService.findByOwnerId(requestWorker.getOwnerId()).orElseThrow(
                     () -> new NotFoundException("Owner not found")
             );
-            savedRequest.setOwnerId(requestWorker.getOwnerId());
+            savedRequest.setOwnerDetails(ownerDetail);
         }
 
         Set<Skill> skills = new HashSet<>();
@@ -143,7 +150,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
                 () -> new NotFoundException("Card not found with id: " + id)
         );
         var requestWorkerDtoOnRequest = modelMapper.map(requestWorker, RequestWorkerDtoOnRequest.class);
-        var ownerDetail = ownerDetailService.findByOwnerId(requestWorker.getOwnerId()).orElseThrow(
+        var ownerDetail = ownerDetailService.findByOwnerId(requestWorker.getOwnerDetails().getId()).orElseThrow(
                 () -> new NotFoundException("Owner not found")
         );
         requestWorkerDtoOnRequest.setOwnerDetail(ownerDetail);
@@ -154,7 +161,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     public void delete(Long id, Principal principal) {
         var requestWorker = requestWorkerRepository.findById(id);
         if(requestWorker.isPresent()) {
-            if (!securityService.isOwner(requestWorker.get().getOwnerId(), principal))
+            if (!securityService.isOwner(requestWorker.get().getOwnerDetails().getId(), principal))
                 throw new ForbiddenException("There is no access to change the card");
         }
 
@@ -165,16 +172,17 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     }
 
     @Override
-    public List<RequestWorkerDtoOnRequest> findAll(Specification<RequestWorker> specRequest, Pageable paging) {
-        var requestWorker = requestWorkerRepository.findAll(specRequest, paging);
-        ModelMapper modelMapper = new ModelMapper();
-        List<RequestWorkerDtoOnRequest> requestWorkerDtoOnRequest = new ArrayList<>();
-        for (RequestWorker request : requestWorker) {
-            var requestDto = modelMapper.map(request, RequestWorkerDtoOnRequest.class);
-            Optional<OwnerDetails> userDetailOpt = ownerDetailService.findByOwnerId(request.getOwnerId());
-            userDetailOpt.ifPresent(requestDto::setOwnerDetail);
-            requestWorkerDtoOnRequest.add(requestDto);
-        }
-        return requestWorkerDtoOnRequest;
+    public Page<RequestWorkerDtoOnRequest> findAll(Specification<RequestWorker> specRequest, Pageable paging) {
+        Page<RequestWorker> requestWorkerPage = requestWorkerRepository.findAll(specRequest, paging);
+        return RequestWorkerMapper.mapEntityPageIntoDTOPage(paging, requestWorkerPage);
+//        ModelMapper modelMapper = new ModelMapper();
+//        List<RequestWorkerDtoOnRequest> requestWorkerDtoOnRequest = new ArrayList<>();
+//        for (RequestWorker request : requestWorker) {
+//            var requestDto = modelMapper.map(request, RequestWorkerDtoOnRequest.class);
+//            Optional<OwnerDetails> userDetailOpt = ownerDetailService.findByOwnerId(request.getOwnerDetails().getId());
+//            userDetailOpt.ifPresent(requestDto::setOwnerDetail);
+//            requestWorkerDtoOnRequest.add(requestDto);
+//        }
+//        return requestWorkerDtoOnRequest;
     }
 }
