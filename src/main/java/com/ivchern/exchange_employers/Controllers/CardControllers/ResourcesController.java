@@ -125,6 +125,20 @@ public class ResourcesController {
         resourceService.delete(id, principal);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(description = "Получение карточкой запроса ресурса по id")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Success!"),
+            @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired",
+                    content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "404", description = "Resource request card not found",
+                    content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExceptionResponse.class))})})
+    public ResourceDtoOnRequest getResource(@PathVariable("id") Long id) {
+        return resourceService.findById(id);
+    }
 }
 
 
