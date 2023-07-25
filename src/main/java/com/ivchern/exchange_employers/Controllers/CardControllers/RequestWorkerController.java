@@ -106,7 +106,7 @@ public class RequestWorkerController {
                    @ApiResponse(responseCode = "409", description = "Error save data",
                            content = { @Content(mediaType = "application/json",
                            schema = @Schema(implementation = ExceptionResponse.class))})})
-    public RequestWorker postRequest(@RequestBody RequestWorkerDtoOnSave request) {
+    public RequestWorkerDtoOnRequest postRequest(@RequestBody RequestWorkerDtoOnSave request) {
         return requestWorkerService.save(request);
     }
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
@@ -122,7 +122,7 @@ public class RequestWorkerController {
             @ApiResponse(responseCode = "403", description = "Not enough permissions to use this endpoint",
                     content = { @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExceptionResponse.class))})})
-    public RequestWorker putRequest(@PathVariable("id") Long id,
+    public RequestWorkerDtoOnRequest putRequest(@PathVariable("id") Long id,
                                     @RequestBody RequestWorkerDtoOnSave request,
                                     Principal principal) {
         return requestWorkerService.update(id, request, principal);

@@ -41,7 +41,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
 
     @Override
     @Transactional
-    public RequestWorker save(RequestWorkerDtoOnSave requestDto) {
+    public RequestWorkerDtoOnRequest save(RequestWorkerDtoOnSave requestDto) {
         ModelMapper modelMapper = new ModelMapper();
         RequestWorker requestWorker = modelMapper.map(requestDto, RequestWorker.class);
 
@@ -71,11 +71,11 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         requestWorker.setCreated(dateCreate);
         requestWorker.setUpdated(dateCreate);
 
-        return requestWorkerRepository.save(requestWorker);
+        return RequestWorkerMapper.mapEntityIntoDTO(requestWorkerRepository.save(requestWorker));
     }
 
     @Override
-    public RequestWorker update(Long id, RequestWorkerDtoOnSave requestWorker, Principal principal) {
+    public RequestWorkerDtoOnRequest update(Long id, RequestWorkerDtoOnSave requestWorker, Principal principal) {
         var savedRequestOpt = requestWorkerRepository.findById(id);
         if(savedRequestOpt.isPresent()) {
             if (!securityService.isOwner(savedRequestOpt.get().getOwnerDetails().getId(), principal))
@@ -120,7 +120,7 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         savedRequest.setSkills(skills);
 
         savedRequest.setUpdated(LocalDateTime.now());
-        return requestWorkerRepository.save(savedRequest);
+        return RequestWorkerMapper.mapEntityIntoDTO(requestWorkerRepository.save(savedRequest));
     }
 
     @Override

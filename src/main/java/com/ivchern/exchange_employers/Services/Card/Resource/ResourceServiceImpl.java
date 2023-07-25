@@ -37,7 +37,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource update(ResourceDtoOnSave resourceDtoOnSave, Long id, Principal principal) {
+    public ResourceDtoOnRequest update(ResourceDtoOnSave resourceDtoOnSave, Long id, Principal principal) {
         var resourceOpt = resourceRepository.findById(id);
         if(resourceOpt.isPresent()) {
             if (!securityService.isOwner(resourceOpt.get().getOwnerDetails().getId(), principal))
@@ -79,7 +79,7 @@ public class ResourceServiceImpl implements ResourceService {
                     () -> new IllegalArgument("Owner not found with id: " + resourceDtoOnSave.getOwnerId())
             ));
         }
-        return resourceRepository.save(resource);
+        return ResourceMapper.mapEntityIntoDTO(resourceRepository.save(resource));
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource save(ResourceDtoOnSave resourceDtoOnSave) {
+    public ResourceDtoOnRequest save(ResourceDtoOnSave resourceDtoOnSave) {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         Resource resource = modelMapper.map(resourceDtoOnSave, Resource.class);
@@ -124,7 +124,7 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setCreated(created);
         resource.setUpdated(created);
         resource.setStatus(Status.ACTIVE);
-        return resourceRepository.save(resource);
+        return ResourceMapper.mapEntityIntoDTO(resourceRepository.save(resource));
     }
 
     @Override

@@ -88,7 +88,7 @@ public class ResourcesController {
             @ApiResponse(responseCode = "404", description = "Resource request card not found",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))})})
-    public Resource save(@RequestBody ResourceDtoOnSave resource){
+    public ResourceDtoOnRequest save(@RequestBody ResourceDtoOnSave resource){
         return resourceService.save(resource);
     }
 
@@ -105,7 +105,7 @@ public class ResourcesController {
             @ApiResponse(responseCode = "403", description = "Not enough permissions to use this endpoint",
                     content = { @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExceptionResponse.class))})})
-    public Resource putResource(@PathVariable("id") Long id, @RequestBody ResourceDtoOnSave resource, Principal principal) {
+    public ResourceDtoOnRequest putResource(@PathVariable("id") Long id, @RequestBody ResourceDtoOnSave resource, Principal principal) {
         return resourceService.update(resource, id, principal);
     }
 

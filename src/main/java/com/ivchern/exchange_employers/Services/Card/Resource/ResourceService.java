@@ -10,10 +10,10 @@ import org.springframework.data.jpa.domain.Specification;
 import java.security.Principal;
 
 public interface ResourceService {
-    Resource update(ResourceDtoOnSave resourceDTO, Long Id, Principal principal);
+    ResourceDtoOnRequest update(ResourceDtoOnSave resourceDTO, Long Id, Principal principal);
     Page<ResourceDtoOnRequest> findAll(Specification<Resource> SpecRequest, Pageable page);
     ResourceDtoOnRequest findById(Long id);
-    Resource save(ResourceDtoOnSave resourceDtoOnSave);
+    ResourceDtoOnRequest save(ResourceDtoOnSave resourceDtoOnSave);
     void delete(Long id, Principal principal);
 
 

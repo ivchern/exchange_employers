@@ -11,8 +11,8 @@ import java.security.Principal;
 import java.util.List;
 
 public interface RequestWorkerService {
-    RequestWorker save(RequestWorkerDtoOnSave resource);
-    RequestWorker update(Long id, RequestWorkerDtoOnSave requestWorker, Principal principal);
+    RequestWorkerDtoOnRequest save(RequestWorkerDtoOnSave resource);
+    RequestWorkerDtoOnRequest update(Long id, RequestWorkerDtoOnSave requestWorker, Principal principal);
     RequestWorkerDtoOnRequest findById(Long id);
     void delete(Long id, Principal principal);
     Page<RequestWorkerDtoOnRequest> findAll(Specification<RequestWorker> specRequest, Pageable paging);
