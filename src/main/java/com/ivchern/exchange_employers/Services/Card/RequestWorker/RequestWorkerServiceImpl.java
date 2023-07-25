@@ -8,7 +8,6 @@ import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnS
 import com.ivchern.exchange_employers.Model.Card.RequestWorker;
 import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Skill;
-import com.ivchern.exchange_employers.Model.User.OwnerDetails;
 import com.ivchern.exchange_employers.Repositories.RequestWorkerRepository;
 import com.ivchern.exchange_employers.Security.Services.SecurityService;
 import com.ivchern.exchange_employers.Services.Skill.SkillService;
@@ -16,8 +15,6 @@ import com.ivchern.exchange_employers.Services.User.OwnerDetailServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,8 +27,6 @@ import java.util.*;
 @Service
 @Slf4j
 public class RequestWorkerServiceImpl implements RequestWorkerService {
-
-    private static final Logger logger = LoggerFactory.getLogger(RequestWorkerServiceImpl.class);
     private final RequestWorkerRepository requestWorkerRepository;
     private final SkillService skillService;
     private final OwnerDetailServiceImpl ownerDetailService;
@@ -43,21 +38,6 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
         this.ownerDetailService = ownerDetailService;
         this.securityService = securityService;
     }
-
-//    @Override
-//    public List<RequestWorkerDtoOnRequest> findAll(Pageable paging) {
-//        List<RequestWorker> requestWorker = requestWorkerRepository.findAll(paging);
-//        ModelMapper  modelMapper = new ModelMapper();
-//
-//        List<RequestWorkerDtoOnRequest> requestWorkerDtoOnRequest = new ArrayList<>();
-//        for (RequestWorker request : requestWorker) {
-//            var requestDto = modelMapper.map(request, RequestWorkerDtoOnRequest.class);
-////            Optional<OwnerDetails> userDetailOpt = ownerDetailService.findByOwnerId(request.getOwnerId());
-////            userDetailOpt.ifPresent(requestDto::setOwnerDetail);
-//            requestWorkerDtoOnRequest.add(requestDto);
-//        }
-//        return requestWorkerDtoOnRequest;
-//    }
 
     @Override
     @Transactional
@@ -175,14 +155,5 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     public Page<RequestWorkerDtoOnRequest> findAll(Specification<RequestWorker> specRequest, Pageable paging) {
         Page<RequestWorker> requestWorkerPage = requestWorkerRepository.findAll(specRequest, paging);
         return RequestWorkerMapper.mapEntityPageIntoDTOPage(paging, requestWorkerPage);
-//        ModelMapper modelMapper = new ModelMapper();
-//        List<RequestWorkerDtoOnRequest> requestWorkerDtoOnRequest = new ArrayList<>();
-//        for (RequestWorker request : requestWorker) {
-//            var requestDto = modelMapper.map(request, RequestWorkerDtoOnRequest.class);
-//            Optional<OwnerDetails> userDetailOpt = ownerDetailService.findByOwnerId(request.getOwnerDetails().getId());
-//            userDetailOpt.ifPresent(requestDto::setOwnerDetail);
-//            requestWorkerDtoOnRequest.add(requestDto);
-//        }
-//        return requestWorkerDtoOnRequest;
     }
 }

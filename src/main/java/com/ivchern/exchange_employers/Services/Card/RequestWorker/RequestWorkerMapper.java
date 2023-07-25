@@ -12,9 +12,7 @@ import java.util.List;
 public final class RequestWorkerMapper {
     static List<RequestWorkerDtoOnRequest> mapEntitiesIntoDTOs(Iterable<RequestWorker> entities) {
         List<RequestWorkerDtoOnRequest> dtos = new ArrayList<>();
-
         entities.forEach(e -> dtos.add(mapEntityIntoDTO(e)));
-
         return dtos;
     }
 
