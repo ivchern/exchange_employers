@@ -42,6 +42,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/employers_exchange
+      spring_jpa_hibernate_ddl-auto: none
     networks:
       - postgres
     links:
