@@ -29,6 +29,7 @@ public final class ResourceMapper {
         dto.setJobTitleResource(resource.getTeammate().getJobTitle());
         dto.setRank(resource.getTeammate().getRank());
         dto.setSkills(resource.getTeammate().getSkills());
+        dto.setStatus(resource.getStatus());
         dto.setCreated(resource.getCreated());
         dto.setUpdated(resource.getUpdated());
         dto.setOwnerDetail(resource.getOwnerDetails());
