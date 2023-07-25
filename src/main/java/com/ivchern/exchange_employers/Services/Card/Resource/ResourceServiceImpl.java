@@ -89,6 +89,14 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public ResourceDtoOnRequest findById(Long id) {
+        var resource = resourceRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Card not found with id: " + id)
+        );
+        return ResourceMapper.mapEntityIntoDTO(resource);
+    }
+
+    @Override
     public Resource save(ResourceDtoOnSave resourceDtoOnSave) {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);

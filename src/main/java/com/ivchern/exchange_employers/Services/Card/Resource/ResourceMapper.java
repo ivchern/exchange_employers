@@ -12,9 +12,7 @@ import java.util.List;
 public final class ResourceMapper {
     static List<ResourceDtoOnRequest> mapEntitiesIntoDTOs(Iterable<Resource> entities) {
         List<ResourceDtoOnRequest> dtos = new ArrayList<>();
-
         entities.forEach(e -> dtos.add(mapEntityIntoDTO(e)));
-
         return dtos;
     }
 
