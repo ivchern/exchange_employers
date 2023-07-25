@@ -26,8 +26,6 @@ public class RequestWorkerDtoOnSave {
     @Schema(description = "Необходимость интерью у заказчика", example = "true")
     boolean isInterviewNeeded;
     @Schema(description = "Требуемые скиллы", type = "array", example = "[{ \"id\": 0, \"skill\": \"Kafka\", \"description\": \"any\" }]")
-    //
-//    @Schema(description = "Требуемые скиллы", type = "array", example = "[\"{Java}\", \"Kafka\", \"Maven\"]")
     private Set<Skill> skills;
     @Schema(description = "Владелец карточки", example = "2")
     private Long ownerId;

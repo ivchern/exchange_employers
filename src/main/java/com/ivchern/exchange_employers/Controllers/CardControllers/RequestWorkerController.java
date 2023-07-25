@@ -4,7 +4,7 @@ import com.ivchern.exchange_employers.Common.ExceptionResponse;
 import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnSave;
 import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnRequest;
 import com.ivchern.exchange_employers.Model.Card.RequestWorker;
-import com.ivchern.exchange_employers.Services.Card.RequestWorkerService;
+import com.ivchern.exchange_employers.Services.Card.RequestWorker.RequestWorkerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -25,9 +25,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -113,6 +110,7 @@ public class RequestWorkerController {
     }
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
     @Operation(description = "Обновление данных карточки запроса ресурса")
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Success!"),
             @ApiResponse(responseCode = "404", description = "Resource request card not found",
                     content = { @Content(mediaType = "application/json",
@@ -129,7 +127,6 @@ public class RequestWorkerController {
     }
 
     @DeleteMapping(path = "/{id}",  produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удаление карточки запроса ресурса")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Success!"),
             @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired",

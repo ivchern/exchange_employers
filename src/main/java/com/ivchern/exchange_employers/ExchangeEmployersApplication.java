@@ -5,10 +5,11 @@ import com.ivchern.exchange_employers.Controllers.CardControllers.RequestWorkerC
 import com.ivchern.exchange_employers.Controllers.CardControllers.ResourcesController;
 import com.ivchern.exchange_employers.Controllers.UserController;
 import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnSave;
-import com.ivchern.exchange_employers.DTO.CardDTO.ResourceDtoOnCreate;
+import com.ivchern.exchange_employers.DTO.CardDTO.ResourceDTO.ResourceDtoOnSave;
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeammateDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.ContactDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
+import com.ivchern.exchange_employers.Model.Card.Resource;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Model.User.ERole;
 import com.ivchern.exchange_employers.Model.User.Role;
@@ -16,6 +17,7 @@ import com.ivchern.exchange_employers.Model.User.User;
 import com.ivchern.exchange_employers.Repositories.RoleRepository;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
 import com.ivchern.exchange_employers.Services.Teammate.TeammateService;
+import com.ivchern.exchange_employers.Services.User.OwnerDetailService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.CommandLineRunner;
@@ -43,6 +45,7 @@ public class ExchangeEmployersApplication {
 	@Bean
 	public CommandLineRunner LoadData(RoleRepository roleRepository, AuthController authController, UserController userController,
 									  SkillRepository skillRepository, TeammateService teammateService,
+									  OwnerDetailService ownerDetailService,
 									  ResourcesController resourcesController, RequestWorkerController requestWorkerController) {
 		return (args) -> {
 				var user_role = roleRepository.save(new Role(1, ROLE_USER));
@@ -103,10 +106,11 @@ public class ExchangeEmployersApplication {
 			skillRepository.save(new Skill(7L, "Maven", "Maven desc"));
 			skillRepository.save(new Skill(8L, "Spring", "Spring desc"));
 			skillRepository.save(new Skill(9L, "Kafka", "Kafka desc"));
-
-			teammateService.save(new TeammateDTO("Ivan",  "Ivanov", "Java Developer", "Senior",1L, 1L
+			skillRepository.save(new Skill(10L, "Kotlin", "Kotlin desc"));
+			skillRepository.save(new Skill(11L, "Android", "Android desc"));
+			var teammate1 = teammateService.save(new TeammateDTO("Ivan",  "Ivanov", "Java Developer", "Senior",1L, 1L
 					, new HashSet<String>(Arrays.asList("Java", "SQL", "Maven", "Kafka"))));
-			teammateService.save(new TeammateDTO("Egor",  "Egorov", "Java Developer", "Junior", 1L, 1L
+			var teammate2 = teammateService.save(new TeammateDTO("Egor",  "Egorov", "Java Developer", "Junior", 1L, 1L
 					,new HashSet<String>(Arrays.asList("Java", "SQL", "Maven"))));
 			teammateService.save(new TeammateDTO("Ilia",  "Maslow", "Java Developer", "Middle", 1L, 1L
 					,new HashSet<String>(Arrays.asList("Java", "SQL"))));
@@ -122,15 +126,26 @@ public class ExchangeEmployersApplication {
 					new HashSet<String>(Arrays.asList("IOS", "Android", "Flutter"))));
 			teammateService.save(new TeammateDTO("Alex",  "Mask", "IOS Developer","Middle", 3L, 3L,
 					new HashSet<String>(Arrays.asList("IOS"))));
+			teammateService.save(new TeammateDTO("Ilian",  "Mask", "Kotlin Developer","Middle", 3L, 3L,
+					new HashSet<String>(Arrays.asList("IOS"))));
 
-			resourcesController.setResources(new ResourceDtoOnCreate("Java Developer", "From Home",
-					new Date(123,05,12), new Date(124,1,1), 1L, 1L));
-			resourcesController.setResources(new ResourceDtoOnCreate("Java Developer", "From Home",
-					new Date(124,1,1), new Date(125,1,1), 2L, 2L));
-			resourcesController.setResources(new ResourceDtoOnCreate("Mobile Developer", "From Home",
-					new Date(123, 5, 15), new Date(125,15,15), 9L, 3L));
-			resourcesController.setResources(new ResourceDtoOnCreate("React Developer", "From Home",
-					new Date(123,8,12), new Date(123,9,1), 4L, 2L));
+			var resource1 = new ResourceDtoOnSave("Java dev", "Java Developer", "From Home",
+					new Date(123,05,12), new Date(124,1,1), 1L, 1L);
+			var resource2 = new ResourceDtoOnSave("Java Developer", "Java dev desc", "From Home",
+					new Date(123,05,12), new Date(124,1,1), 1L, 1L);
+			var resource3 = new ResourceDtoOnSave("Java Developer", "Java dev desc", "From Home",
+					new Date(124,1,1), new Date(125,1,1), 2L, 2L);
+			var resource4 = new ResourceDtoOnSave("Mobile Developer","Mobile dev desc",  "From Home",
+					new Date(123, 5, 15), new Date(125,15,15), 9L, 3L);
+			var resource5 = new ResourceDtoOnSave("React Developer", "React Developer desc",  "From Home",
+					new Date(123,8,12), new Date(123,9,1), 4L, 2L);
+
+
+			resourcesController.save(resource2);
+			resourcesController.save(resource3);
+			resourcesController.save(resource1);
+			resourcesController.save(resource4);
+			resourcesController.save(resource5);
 
 			var request1 = new RequestWorkerDtoOnSave(
 					"Java Developer",

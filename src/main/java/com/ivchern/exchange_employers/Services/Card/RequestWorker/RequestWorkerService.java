@@ -1,4 +1,4 @@
-package com.ivchern.exchange_employers.Services.Card;
+package com.ivchern.exchange_employers.Services.Card.RequestWorker;
 
 import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnSave;
 import com.ivchern.exchange_employers.DTO.CardDTO.RequestDTO.RequestWorkerDtoOnRequest;

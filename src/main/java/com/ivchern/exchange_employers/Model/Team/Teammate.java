@@ -1,19 +1,12 @@
 package com.ivchern.exchange_employers.Model.Team;
 
 import com.ivchern.exchange_employers.Model.BaseEntity;
-import com.ivchern.exchange_employers.Model.Card.Rank;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @AllArgsConstructor

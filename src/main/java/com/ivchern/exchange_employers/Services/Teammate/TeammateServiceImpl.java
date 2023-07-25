@@ -5,6 +5,7 @@ import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Teammate;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
 import com.ivchern.exchange_employers.Repositories.TeammateRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;

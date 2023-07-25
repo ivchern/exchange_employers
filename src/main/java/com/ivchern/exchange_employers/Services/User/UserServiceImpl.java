@@ -20,10 +20,10 @@ import java.util.*;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private ContactRepository contactRepository;
-    private UserRepository userRepository;
-    private TeamService teamService;
-    private OwnerDetailsRepository ownerDetailsRepository;
+    private final ContactRepository contactRepository;
+    private final UserRepository userRepository;
+    private final TeamService teamService;
+    private final OwnerDetailsRepository ownerDetailsRepository;
 
     public UserServiceImpl(ContactRepository contactRepository, UserRepository userRepository, TeamService teamService, OwnerDetailsRepository ownerDetailsRepository) {
         this.contactRepository = contactRepository;
