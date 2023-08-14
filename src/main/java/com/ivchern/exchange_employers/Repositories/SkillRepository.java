@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, Long>, JpaSpecificationExecutor<Skill> {
-    @Query(value = "SELECT * FROM skill s WHERE s.skill_name = ?1", nativeQuery = true)
+    @Query(value = "SELECT id, skill_name, description  FROM skill s WHERE s.skill_name = ?1", nativeQuery = true)
     Optional<Skill> findByName(String skillName);
 
     @Query(value = "SELECT * FROM skill s WHERE s.skill_name in (:names)", nativeQuery = true)
