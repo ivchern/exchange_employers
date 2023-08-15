@@ -36,15 +36,16 @@ public class SkillServiceImpl implements SkillService {
             throw new IllegalArgument("Description cannot be empty");
         }
         var skillOpt = skillRepository.findByName(skillDto.getName());
-        skillOpt.orElseThrow(
-                () -> new IllegalArgument("Skill with name " + skillDto.getName() + " already exists")
-        );
-        Skill skill = new Skill(
-                0L,
-                skillDto.getName(),
-                skillDto.getDescription()
-        );
-        return skillRepository.save(skill);
+        if (skillOpt.isEmpty()){
+            Skill skill = new Skill(
+                    0L,
+                    skillDto.getName(),
+                    skillDto.getDescription()
+            );
+            return skillRepository.save(skill);
+        }else {
+            throw new IllegalArgument("Skill with name " + skillDto.getName() + " already exists");
+        }
     }
 
     @Override

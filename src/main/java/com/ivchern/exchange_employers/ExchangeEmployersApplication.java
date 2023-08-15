@@ -100,7 +100,6 @@ public class ExchangeEmployersApplication {
 			skillRepository.save(new Skill(1L, "Java", "Java desc"));
 			skillRepository.save(new Skill(2L, "SQL", "SQL desc"));
 			skillRepository.save(new Skill(3L, "React", "React desc"));
-			skillRepository.save(new Skill(4L, "Android", "Android desc"));
 			skillRepository.save(new Skill(5L, "IOS", "IOS desc"));
 			skillRepository.save(new Skill(6L, "Flutter", "Flutter desc"));
 			skillRepository.save(new Skill(7L, "Maven", "Maven desc"));
