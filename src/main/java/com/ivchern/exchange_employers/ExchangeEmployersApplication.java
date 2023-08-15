@@ -9,7 +9,6 @@ import com.ivchern.exchange_employers.DTO.CardDTO.ResourceDTO.ResourceDtoOnSave;
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeammateDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.ContactDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
-import com.ivchern.exchange_employers.Model.Card.Resource;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Model.User.ERole;
 import com.ivchern.exchange_employers.Model.User.Role;

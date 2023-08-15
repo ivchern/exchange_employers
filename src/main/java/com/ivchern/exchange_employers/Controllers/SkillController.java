@@ -32,6 +32,11 @@ public class SkillController {
     }
 
     @GetMapping
+    @Operation(description = "Поиск всех скиллов")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Success!"),
+                   @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired",
+                            content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))})})
     public Iterable<Skill> getSkills() {
         return skillService.findAll();
     }
