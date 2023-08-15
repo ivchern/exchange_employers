@@ -29,7 +29,5 @@ public class OwnerDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "contact_id"))
     private Set<Contact> contacts = new HashSet<>();
-//    @JsonManagedReference(value = "owner_id")
-//    public List<RequestWorker> requestWorkers;
 
 }

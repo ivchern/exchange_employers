@@ -19,8 +19,8 @@ import java.util.Optional;
 @Slf4j
 public class TeammateServiceImpl implements TeammateService{
 
-    private TeammateRepository teammateRepository;
-    private SkillRepository skillRepository;
+    private final TeammateRepository teammateRepository;
+    private final SkillRepository skillRepository;
 
     public TeammateServiceImpl(TeammateRepository teammateRepository, SkillRepository skillRepository) {
         this.teammateRepository = teammateRepository;

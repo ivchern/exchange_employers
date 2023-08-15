@@ -9,7 +9,6 @@ import com.ivchern.exchange_employers.DTO.CardDTO.ResourceDTO.ResourceDtoOnSave;
 import com.ivchern.exchange_employers.DTO.TeamDTO.TeammateDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.ContactDTO;
 import com.ivchern.exchange_employers.DTO.UserDTO.UserDTO;
-import com.ivchern.exchange_employers.Model.Card.Resource;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Model.User.ERole;
 import com.ivchern.exchange_employers.Model.User.Role;
@@ -100,7 +99,6 @@ public class ExchangeEmployersApplication {
 			skillRepository.save(new Skill(1L, "Java", "Java desc"));
 			skillRepository.save(new Skill(2L, "SQL", "SQL desc"));
 			skillRepository.save(new Skill(3L, "React", "React desc"));
-			skillRepository.save(new Skill(4L, "Android", "Android desc"));
 			skillRepository.save(new Skill(5L, "IOS", "IOS desc"));
 			skillRepository.save(new Skill(6L, "Flutter", "Flutter desc"));
 			skillRepository.save(new Skill(7L, "Maven", "Maven desc"));

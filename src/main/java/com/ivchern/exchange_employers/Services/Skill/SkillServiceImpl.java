@@ -1,17 +1,17 @@
 package com.ivchern.exchange_employers.Services.Skill;
 
+import com.ivchern.exchange_employers.Common.Exception.IllegalArgument;
+import com.ivchern.exchange_employers.DTO.SkillDTO.SkillDtoOnSave;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Repositories.SkillRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class SkillServiceImpl implements SkillService {
 
-    private SkillRepository skillRepository;
+    private final SkillRepository skillRepository;
 
     public SkillServiceImpl(SkillRepository skillRepository) {
         this.skillRepository = skillRepository;
@@ -19,7 +19,6 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Optional<Skill> findById(Long id) {
-        log.info("Find skill - {Find skill - {id}", id);
         return skillRepository.findById(id);
     }
 
@@ -29,8 +28,36 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
+    public Skill save(SkillDtoOnSave skillDto){
+        if(skillDto.getName() == null || skillDto.getName().isEmpty()){
+            throw new IllegalArgument("Name cannot be empty");
+        }
+        if(skillDto.getDescription() == null || skillDto.getDescription().isEmpty()){
+            throw new IllegalArgument("Description cannot be empty");
+        }
+        var skillOpt = skillRepository.findByName(skillDto.getName());
+        if (skillOpt.isEmpty()){
+            Skill skill = new Skill(
+                    0L,
+                    skillDto.getName(),
+                    skillDto.getDescription()
+            );
+            return skillRepository.save(skill);
+        }else {
+            throw new IllegalArgument("Skill with name " + skillDto.getName() + " already exists");
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        if(!skillRepository.existsById(id)){
+            throw new IllegalArgumentException("Skill with id " + id + " does not exist");
+        }
+        skillRepository.deleteById(id);
+    }
+
+    @Override
     public Iterable<Skill> findAll() {
-        log.info("Find skills");
         return skillRepository.findAll();
     }
 }
