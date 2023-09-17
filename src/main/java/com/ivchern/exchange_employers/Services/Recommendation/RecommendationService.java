@@ -2,6 +2,7 @@ package com.ivchern.exchange_employers.Services.Recommendation;
 
 import com.ivchern.exchange_employers.Configuration.RecommendationSystemClient;
 import com.ivchern.grpc.Recommendations.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
