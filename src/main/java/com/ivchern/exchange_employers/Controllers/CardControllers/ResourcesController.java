@@ -139,6 +139,21 @@ public class ResourcesController {
     public ResourceDtoOnRequest getResource(@PathVariable("id") Long id) {
         return resourceService.findById(id);
     }
+
+    @GetMapping(path = "/{id}/recommendation")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(description = "Получение рекомендаций для ресурса по id")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Success!"),
+            @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "404", description = "Resource request card not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))})})
+    public Iterable<Resource> getResourceRecommendation(@PathVariable("id") Long id) {
+        return resourceService.getRecommendationById(id);
+    }
+
 }
 
 

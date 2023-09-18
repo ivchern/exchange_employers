@@ -2,15 +2,16 @@ package com.ivchern.exchange_employers.Services.Recommendation;
 
 import com.ivchern.exchange_employers.Configuration.RecommendationSystemClient;
 import com.ivchern.grpc.Recommendations.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.net.ssl.SSLException;
 
 @Service
 public class RecommendationService {
     private final RecommendationSystemClient recommendationSystemClient;
 
-    public RecommendationService() {
-        recommendationSystemClient = new RecommendationSystemClient("localhost", 50051);
+    public RecommendationService() throws SSLException {
+        recommendationSystemClient = new RecommendationSystemClient("127.0.0.1", 50051);
     }
 
     public CardResponse getRecommendation(CardRequest request) {

@@ -18,6 +18,6 @@ message CardResponse {
   repeated int64 selectedCardId = 1;
 }
 
-service recomendationSystem {
-  rpc getRecomendation(CardRequest) returns (CardResponse);
+service recommendationSystem {
+  rpc recommendation(CardRequest) returns (CardResponse);
 }

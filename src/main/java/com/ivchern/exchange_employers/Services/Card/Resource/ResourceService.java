@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.security.Principal;
+import java.util.List;
 
 public interface ResourceService {
     ResourceDtoOnRequest update(ResourceDtoOnSave resourceDTO, Long Id, Principal principal);
@@ -15,6 +16,5 @@ public interface ResourceService {
     ResourceDtoOnRequest findById(Long id);
     ResourceDtoOnRequest save(ResourceDtoOnSave resourceDtoOnSave);
     void delete(Long id, Principal principal);
-
-
+    List<Resource> getRecommendationById(Long id);
 }

@@ -29,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/request", produces = "application/json")
@@ -143,5 +142,18 @@ public class RequestWorkerController {
     public ResponseEntity<Void>  deleteRequest(@PathVariable("id") Long id, Principal principal) {
          requestWorkerService.delete(id, principal);
          return ResponseEntity.noContent().build();
+    }
+    @GetMapping(path= "/{id}/recommendation")
+    @Operation(description = "Получение рекомендаций для запроса ресурса по идентификатору")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Success!"),
+            @ApiResponse(responseCode = "404", description = "Resource request card not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Api session missing, invalid or expired",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))})})
+    public Iterable<RequestWorker> RequestWorker(@PathVariable("id") Long id){
+        return requestWorkerService.getRecommendationById(id);
     }
 }

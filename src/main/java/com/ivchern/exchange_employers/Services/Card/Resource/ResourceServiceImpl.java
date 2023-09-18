@@ -9,8 +9,11 @@ import com.ivchern.exchange_employers.Model.Card.Resource;
 import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Repositories.ResourceRepository;
 import com.ivchern.exchange_employers.Security.Services.SecurityService;
+import com.ivchern.exchange_employers.Services.Recommendation.RecommendationMapper;
+import com.ivchern.exchange_employers.Services.Recommendation.RecommendationService;
 import com.ivchern.exchange_employers.Services.Teammate.TeammateService;
 import com.ivchern.exchange_employers.Services.User.OwnerDetailService;
+import com.ivchern.grpc.Recommendations;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -28,12 +31,16 @@ public class ResourceServiceImpl implements ResourceService {
     private final ResourceRepository resourceRepository;
     private final OwnerDetailService ownerDetailService;
     private final SecurityService securityService;
+    private final RecommendationService recommendationService;
+    private final RecommendationMapper recommendationMapper;
 
-    public ResourceServiceImpl(TeammateService teammateService, ResourceRepository resourceRepository, OwnerDetailService ownerDetailService, SecurityService securityService) {
+    public ResourceServiceImpl(TeammateService teammateService, ResourceRepository resourceRepository, OwnerDetailService ownerDetailService, SecurityService securityService, RecommendationService recommendationService, RecommendationMapper recommendationMapper) {
         this.teammateService = teammateService;
         this.resourceRepository = resourceRepository;
         this.ownerDetailService = ownerDetailService;
         this.securityService = securityService;
+        this.recommendationService = recommendationService;
+        this.recommendationMapper = recommendationMapper;
     }
 
     @Override
@@ -140,7 +147,26 @@ public class ResourceServiceImpl implements ResourceService {
         }
         resourceRepository.delete(resourceOpt.get());
     }
-
+    @Override
+    public List<Resource> getRecommendationById(Long id) {
+        var resources = resourceRepository.findAll();
+        var resourceList= recommendationMapper.CreateRequestFromResource(id, resources);
+        Recommendations.CardResponse recommendationIds = recommendationService.getRecommendation(resourceList);
+        List<Long> selectedCardIds = recommendationIds.getSelectedCardIdList();
+        List<Resource> matchingRequestWorkers = new ArrayList<>();
+        var countCard = (long) selectedCardIds.size();
+        countCard = countCard < 10 ? countCard : countCard;
+        for(int i = 0; i < countCard; i++) {
+            var idRecommendationCard = selectedCardIds.get(i);
+            for (Resource resource : resources) {
+                if (resource.getId().equals(idRecommendationCard)) {
+                    matchingRequestWorkers.add(resource);
+                    break;
+                }
+            }
+        }
+        return matchingRequestWorkers;
+    }
     private boolean isDateConflict(Date startDate, Date endDate){
         return !startDate.before(endDate);
     }
