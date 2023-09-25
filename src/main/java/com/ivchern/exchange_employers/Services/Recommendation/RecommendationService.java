@@ -5,12 +5,13 @@ import com.ivchern.grpc.Recommendations.*;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.SSLException;
+import java.io.IOException;
 
 @Service
 public class RecommendationService {
     private final RecommendationSystemClient recommendationSystemClient;
 
-    public RecommendationService() throws SSLException {
+    public RecommendationService() throws IOException {
         recommendationSystemClient = new RecommendationSystemClient("127.0.0.1", 50051);
     }
 
