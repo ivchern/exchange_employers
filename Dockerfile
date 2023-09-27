@@ -9,7 +9,7 @@ COPY ./src/main/resources/server.crt /opt/app/server.crt
 RUN ./mvnw protobuf:compile
 COPY ./src ./src
 RUN ./mvnw clean install
-
+###
 FROM openjdk:19
 WORKDIR /opt/app
 
