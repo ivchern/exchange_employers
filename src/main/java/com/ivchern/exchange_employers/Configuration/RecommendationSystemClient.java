@@ -24,21 +24,27 @@ public class RecommendationSystemClient {
 
     public RecommendationSystemClient(String host, int port) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
+//        File certFile = Paths.get("./server.crt").toFile();
 
-//        File certChainFile = new File(Objects.requireNonNull(classLoader.getResource("server.crt")).getFile());
+//        File certFile = new File(Objects.requireNonNull(classLoader.getResource("server.crt")).getFile());
 
-        InputStream certInputStream = classLoader.getResourceAsStream("server.crt");
-        if (certInputStream == null) {
-            throw new IllegalArgumentException("server.crt не найден в classpath");
-        }
+//        InputStream certFile = classLoader.getResourceAsStream("server.crt");
+//        if (certFile == null) {
+//            throw new IllegalArgumentException("server.crt не найден в classpath");
+//        }
 
-        try {
-            channel = NettyChannelBuilder.forAddress(host, port)
-                    .sslContext(GrpcSslContexts.forClient().trustManager(certInputStream).build())
-                    .build();
-        } finally {
-            certInputStream.close();
-        }
+//        try {
+//            channel = NettyChannelBuilder.forAddress(host, port)
+//                    .sslContext(GrpcSslContexts.forClient().trustManager(new File("/certs/server.crt")).build())
+//                    .build();
+//            log.info("ok ssl");
+//        } finally {
+////            certInputStream.close();
+//        }
+
+        channel = ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext()
+                .build();
 
         blockingStub = recommendationSystemGrpc.newBlockingStub(channel);
         asyncStub = recommendationSystemGrpc.newStub(channel);
