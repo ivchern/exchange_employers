@@ -1,20 +1,18 @@
 package com.ivchern.exchange_employers.Services.Recommendation;
 
 import com.ivchern.exchange_employers.Configuration.RecommendationSystemClient;
-import com.ivchern.exchange_employers.Configuration.VariableEnvironment;
 import com.ivchern.grpc.Recommendations.*;
 import org.springframework.stereotype.Service;
 
+import javax.net.ssl.SSLException;
 import java.io.IOException;
 
 @Service
 public class RecommendationService {
-    private final VariableEnvironment variableEnvironment;
     private final RecommendationSystemClient recommendationSystemClient;
 
-    public RecommendationService(VariableEnvironment variableEnvironment) throws IOException {
-        this.variableEnvironment = new VariableEnvironment();
-        recommendationSystemClient = new RecommendationSystemClient(variableEnvironment.getGrpcAddress(), variableEnvironment.getGrpcPort());
+    public RecommendationService() throws IOException {
+        recommendationSystemClient = new RecommendationSystemClient("127.0.0.1", 50051);
     }
 
     public CardResponse getRecommendation(CardRequest request) {
