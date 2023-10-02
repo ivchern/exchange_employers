@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.ivchern.grpc;
+
+message CardRequest {
+  int64 id = 1;
+  repeated string skill = 2;
+  repeated CardList matchedCard = 3;
+
+}
+
+message CardList {
+  int64 id = 1;
+  repeated string skill = 2;
+}
+
+message CardResponse {
+  repeated int64 selectedCardId = 1;
+}
+
+service recommendationSystem {
+  rpc recommendation(CardRequest) returns (CardResponse);
+}

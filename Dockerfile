@@ -1,16 +1,19 @@
-
-FROM eclipse-temurin:17-jdk-alpine as builder
-
+FROM openjdk:19 as builder
 WORKDIR /opt/app
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN dos2unix mvnw
-#RUN ./mvnw dependency:go-offline
+
+COPY ./.mvn/ .mvn
+COPY ./mvnw ./pom.xml ./
+
+COPY ./src/main/resources/server.crt /opt/app/server.crt
+
+RUN ./mvnw protobuf:compile
 COPY ./src ./src
 RUN ./mvnw clean install
-
-FROM eclipse-temurin:17-jre-alpine
+###
+FROM openjdk:19
 WORKDIR /opt/app
+
 COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "/opt/app/*.jar"]

@@ -16,4 +16,5 @@ public interface RequestWorkerService {
     RequestWorkerDtoOnRequest findById(Long id);
     void delete(Long id, Principal principal);
     Page<RequestWorkerDtoOnRequest> findAll(Specification<RequestWorker> specRequest, Pageable paging);
+    List<RequestWorker> getRecommendationById(Long id);
 }

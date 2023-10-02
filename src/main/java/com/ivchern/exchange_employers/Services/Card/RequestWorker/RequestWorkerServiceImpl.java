@@ -10,8 +10,11 @@ import com.ivchern.exchange_employers.Model.Status;
 import com.ivchern.exchange_employers.Model.Team.Skill;
 import com.ivchern.exchange_employers.Repositories.RequestWorkerRepository;
 import com.ivchern.exchange_employers.Security.Services.SecurityService;
+import com.ivchern.exchange_employers.Services.Recommendation.RecommendationMapper;
+import com.ivchern.exchange_employers.Services.Recommendation.RecommendationService;
 import com.ivchern.exchange_employers.Services.Skill.SkillService;
 import com.ivchern.exchange_employers.Services.User.OwnerDetailServiceImpl;
+import com.ivchern.grpc.Recommendations;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -31,12 +34,16 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     private final SkillService skillService;
     private final OwnerDetailServiceImpl ownerDetailService;
     private final SecurityService securityService;
+    private final RecommendationMapper recommendationMapper;
+    private final RecommendationService recommendationService;
 
-    public RequestWorkerServiceImpl(RequestWorkerRepository requestWorkerRepository, SkillService skillService, OwnerDetailServiceImpl ownerDetailService, SecurityService securityService) {
+    public RequestWorkerServiceImpl(RequestWorkerRepository requestWorkerRepository, SkillService skillService, OwnerDetailServiceImpl ownerDetailService, SecurityService securityService, RecommendationMapper recommendationMapper, RecommendationService recommendationService) {
         this.requestWorkerRepository = requestWorkerRepository;
         this.skillService = skillService;
         this.ownerDetailService = ownerDetailService;
         this.securityService = securityService;
+        this.recommendationMapper = recommendationMapper;
+        this.recommendationService = recommendationService;
     }
 
     @Override
@@ -155,5 +162,26 @@ public class RequestWorkerServiceImpl implements RequestWorkerService {
     public Page<RequestWorkerDtoOnRequest> findAll(Specification<RequestWorker> specRequest, Pageable paging) {
         Page<RequestWorker> requestWorkerPage = requestWorkerRepository.findAll(specRequest, paging);
         return RequestWorkerMapper.mapEntityPageIntoDTOPage(paging, requestWorkerPage);
+    }
+
+    @Override
+    public List<RequestWorker> getRecommendationById(Long id) {
+        var requestWorkers = requestWorkerRepository.findAll();
+        var requestList= recommendationMapper.CreateRequestFromRequestWorker(id, requestWorkers);
+        Recommendations.CardResponse recommendationIds = recommendationService.getRecommendation(requestList);
+        List<Long> selectedCardIds = recommendationIds.getSelectedCardIdList();
+        List<RequestWorker> matchingRequestWorkers = new ArrayList<>();
+        var countCard = (long) selectedCardIds.size();
+        countCard = countCard < 10 ? countCard : countCard;
+        for(int i = 0; i < countCard; i++) {
+            var idRecommendationCard = selectedCardIds.get(i);
+            for (RequestWorker requestWorker : requestWorkers) {
+                if (requestWorker.getId().equals(idRecommendationCard)) {
+                    matchingRequestWorkers.add(requestWorker);
+                    break;
+                }
+            }
+        }
+        return matchingRequestWorkers;
     }
 }
