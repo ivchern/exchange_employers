@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  exchangeEmployersFrontend:
+    image: exchange-emplyers-frontend/latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ':/app'
+      - '/app/node_modules'
+    ports:
+      - 80:3000

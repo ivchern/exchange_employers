@@ -1,0 +1,98 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_DB: employers_exchange
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  # pgadmin:
+  #   container_name: pgadmin_container
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+  #     PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #   volumes:
+  #     - pgadmin:/var/lib/pgadmin
+
+  #   ports:
+  #     - "${PGADMIN_PORT:-5050}:80"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+
+  ExchangeEmployersBackend:
+    build:
+      dockerfile: Dockerfile
+      context: ./exchange_employers
+    image: exchange-employer-backend/latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/employers_exchange
+#      spring_jpa_hibernate_ddl-auto: update
+#      spring-doc_swagger-ui_configUrl: http://91.193.43.0:8080/v3/api-docs/swagger-config
+#      spring-doc_swagger-ui_url: http://91.193.43.0:8080/v3/api-docs
+      grpc_port: 50051
+      grpc_address: exchangerecommendation
+    networks:
+      - postgres
+      - exchangerecommendation
+    links:
+      - postgres
+    depends_on:
+      - postgres
+      - exchangerecommendation
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./certs:/certs/
+
+  exchangeEmployersFrontend:
+    image: exchange-employers-frontend/latest
+    build:
+      context: ./ShareTeam
+      dockerfile: Dockerfile
+    volumes:
+      - './ShareTeam:/app'
+      - '/app/node_modules'
+    ports:
+      - 80:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  exchangerecommendation:
+    build:
+      dockerfile: Dockerfile
+      context: ./exchange_employers_recommendation
+    image: exchange_recommendation:latest
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./exchange_employers_recommendation:/app
+    environment:
+      PYTHONUNBUFFERED: 1
+    networks:
+      - exchangerecommendation
+      
+networks:
+  postgres:
+    driver: bridge
+  exchangerecommendation:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
