@@ -8,7 +8,7 @@ source_dir="/dockerfiles/ShareTeam"
 target_dir="/ShareTeam"
 cp -f "$(pwd)/$source_dir"/* "$(pwd)/$target_dir"/
 
-#Для использования ssl расскоментировать, и сделать порты доступными изнутри docker-network
+#Для использования ssl раскомментировать, и сделать порты доступными изнутри docker-network
 #sudo $SHELL -c "cd exchange_employers_recommendation; mkdir keys;"
 #sleep 1
 
