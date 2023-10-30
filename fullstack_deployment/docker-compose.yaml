@@ -43,8 +43,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/employers_exchange
 #      spring_jpa_hibernate_ddl-auto: update
-#      spring-doc_swagger-ui_configUrl: http://91.193.43.0:8080/v3/api-docs/swagger-config
-#      spring-doc_swagger-ui_url: http://91.193.43.0:8080/v3/api-docs
+#      spring-doc_swagger-ui_configUrl: http://localhost:8080/v3/api-docs/swagger-config
+#      spring-doc_swagger-ui_url: http://localhost:8080/v3/api-docs
       grpc_port: 50051
       grpc_address: exchangerecommendation
     networks:
