@@ -5,6 +5,17 @@ Demo project for the exchange of employees between departments.
 <code>git clone https://github.com/ivchern/exchange_employers.git
  cd exchange_employers
  docker-compose up -d</code>
+### Running full-stack 
+Модули для запуска fullstack приложения 
+* [Frontend](https://github.com/tanto39/ShareTeam) by tanto39
+* [Recommendation system](https://github.com/ivchern/exchange_employers_recommendation) 
+
+#### Развертывание:
+
+  <code>git clone https://github.com/ivchern/exchange_employers.git
+  cd exchange_employers/fullstack_deployment
+  chmod +x install.sh 
+  ./install.sh </code>
 
 ### Runing swagger API 
 Go to <code>localhost:8080/swagger-ui/index.html</code>
